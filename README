@@ -1,0 +1,4 @@
+Battery Box 2012 Deployment
+============================
+
+Please note: Hardware designs shows use of the PIC16F506. This is no longer available, please use the PIC16F526 as a replacment. The software in this repo is using the later chip.
