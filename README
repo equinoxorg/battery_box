@@ -1,4 +1,10 @@
-Battery Box 2012 Deployment
-============================
+#Battery Box 2012 Deployment
 
+##Hardware
+Hardware designs are made in eagle
 Please note: Hardware designs shows use of the PIC16F506. This is no longer available, please use the PIC16F526 as a replacment. The software in this repo is using the later chip.
+
+##Software
+Software is MPLAB IDE X v1.30 with the Hi Tech C Lite compiler
+
+
