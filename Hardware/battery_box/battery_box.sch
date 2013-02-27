@@ -7655,6 +7655,15 @@ DIN A3, landscape with location and doc. field</description>
 <rectangle x1="2.2949" y1="2" x2="2.7851" y2="3.1001" layer="51"/>
 <rectangle x1="1.0249" y1="2" x2="1.5151" y2="3.1001" layer="51"/>
 </package>
+<package name="PCBMOUNT">
+<hole x="0" y="0" drill="3.2"/>
+<wire x1="-6.35" y1="-6.35" x2="-6.35" y2="6.35" width="0.127" layer="21"/>
+<wire x1="-6.35" y1="-6.35" x2="6.35" y2="-6.35" width="0.127" layer="21"/>
+<wire x1="6.35" y1="-6.35" x2="6.35" y2="6.35" width="0.127" layer="21"/>
+<wire x1="-6.35" y1="6.35" x2="6.35" y2="6.35" width="0.127" layer="21"/>
+<circle x="0" y="0" radius="2.236065625" width="0.127" layer="21"/>
+<wire x1="5.1" y1="6.3" x2="5.1" y2="-6.3" width="0.127" layer="21"/>
+</package>
 </packages>
 <symbols>
 <symbol name="EQUINOX_LOGO_SMALL">
@@ -8749,6 +8758,32 @@ DIN A3, landscape with location and doc. field</description>
 <wire x1="7.62" y1="-7.62" x2="-7.62" y2="-7.62" width="0.254" layer="94"/>
 <wire x1="-7.62" y1="-7.62" x2="-7.62" y2="12.7" width="0.254" layer="94"/>
 </symbol>
+<symbol name="PCBMOUNT">
+<wire x1="-5.08" y1="0" x2="-0.762" y2="0" width="0.254" layer="94"/>
+<wire x1="5.08" y1="0" x2="0.762" y2="0" width="0.254" layer="94"/>
+<wire x1="0.762" y1="0" x2="0" y2="0" width="0.254" layer="94"/>
+<wire x1="0" y1="0" x2="0" y2="8.128" width="0.254" layer="94"/>
+<wire x1="0" y1="8.128" x2="0" y2="10.668" width="0.254" layer="94"/>
+<wire x1="0" y1="12.7" x2="-1.524" y2="9.398" width="0.254" layer="94"/>
+<wire x1="-1.524" y1="9.398" x2="-0.762" y2="7.112" width="0.254" layer="94"/>
+<wire x1="-0.762" y1="7.112" x2="-0.762" y2="0" width="0.254" layer="94"/>
+<wire x1="-0.762" y1="0" x2="0" y2="0" width="0.254" layer="94"/>
+<wire x1="0.762" y1="0" x2="0.762" y2="7.112" width="0.254" layer="94"/>
+<wire x1="0.762" y1="7.112" x2="1.524" y2="9.398" width="0.254" layer="94"/>
+<wire x1="1.524" y1="9.398" x2="0" y2="12.7" width="0.254" layer="94"/>
+<wire x1="0" y1="12.7" x2="0" y2="10.668" width="0.254" layer="94"/>
+<wire x1="0" y1="10.668" x2="-0.508" y2="9.652" width="0.254" layer="94"/>
+<wire x1="-0.508" y1="9.652" x2="0" y2="8.128" width="0.254" layer="94"/>
+<wire x1="0" y1="8.128" x2="0.508" y2="9.652" width="0.254" layer="94"/>
+<wire x1="0.508" y1="9.652" x2="0" y2="10.668" width="0.254" layer="94"/>
+<wire x1="-5.08" y1="0" x2="-5.08" y2="0.762" width="0.254" layer="94"/>
+<wire x1="-5.08" y1="0.762" x2="5.08" y2="0.762" width="0.254" layer="94"/>
+<wire x1="5.08" y1="0.762" x2="5.08" y2="0" width="0.254" layer="94"/>
+<wire x1="-1.016" y1="6.604" x2="1.016" y2="6.604" width="0.254" layer="94"/>
+<wire x1="1.016" y1="6.604" x2="1.016" y2="6.096" width="0.254" layer="94"/>
+<wire x1="1.016" y1="6.096" x2="-1.016" y2="6.096" width="0.254" layer="94"/>
+<wire x1="-1.016" y1="6.096" x2="-1.016" y2="6.604" width="0.254" layer="94"/>
+</symbol>
 </symbols>
 <devicesets>
 <deviceset name="EQUINOX_LOGO_SMALL">
@@ -8855,6 +8890,18 @@ DIN A3, landscape with location and doc. field</description>
 <connect gate="G$1" pin="VDD" pad="1"/>
 <connect gate="G$1" pin="VSS" pad="14"/>
 </connects>
+<technologies>
+<technology name=""/>
+</technologies>
+</device>
+</devices>
+</deviceset>
+<deviceset name="PCB_MOUNT_RICHO">
+<gates>
+<gate name="G$1" symbol="PCBMOUNT" x="0" y="0"/>
+</gates>
+<devices>
+<device name="" package="PCBMOUNT">
 <technologies>
 <technology name=""/>
 </technologies>
@@ -9273,6 +9320,10 @@ Extended by Federico Battaglin &lt;author&gt;&amp;lt;federico.rd@fdpinternationa
 <part name="LD1" library="led" deviceset="DUOLED-RG-C" device=""/>
 <part name="J1" library="equinox" deviceset="CON_HEADER_PRG_PIC_ICSP" device="A"/>
 <part name="U$4" library="equinox" deviceset="PIC16F1503" device="SOIC"/>
+<part name="U$5" library="equinox" deviceset="PCB_MOUNT_RICHO" device=""/>
+<part name="U$6" library="equinox" deviceset="PCB_MOUNT_RICHO" device=""/>
+<part name="U$7" library="equinox" deviceset="PCB_MOUNT_RICHO" device=""/>
+<part name="U$8" library="equinox" deviceset="PCB_MOUNT_RICHO" device=""/>
 </parts>
 <sheets>
 <sheet>
@@ -9293,6 +9344,8 @@ uC to turn off after timeout or extreme LVDC </text>
 <text x="-12.7" y="111.76" size="1.778" layer="98">Check how the V_drop affects the charging 
 off the battery. Possibly change how the 
 charging works.</text>
+<text x="165.1" y="104.14" size="1.778" layer="98">Add Voltage Sense to outputs to check for charging voltage</text>
+<text x="93.98" y="-83.82" size="1.778" layer="98">PCB Mounts</text>
 </plain>
 <instances>
 <instance part="R1" gate="G$1" x="-27.94" y="35.56" rot="R90"/>
@@ -9323,6 +9376,10 @@ charging works.</text>
 <instance part="LD1" gate="G$1" x="33.02" y="-25.4" rot="MR90"/>
 <instance part="J1" gate="J" x="-58.42" y="-71.12"/>
 <instance part="U$4" gate="G$1" x="53.34" y="7.62"/>
+<instance part="U$5" gate="G$1" x="99.06" y="-81.28"/>
+<instance part="U$6" gate="G$1" x="111.76" y="-81.28"/>
+<instance part="U$7" gate="G$1" x="124.46" y="-81.28"/>
+<instance part="U$8" gate="G$1" x="137.16" y="-81.28"/>
 </instances>
 <busses>
 </busses>

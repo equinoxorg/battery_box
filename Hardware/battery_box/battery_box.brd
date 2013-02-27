@@ -6,7 +6,7 @@
 <setting alwaysvectorfont="no"/>
 <setting verticaltext="up"/>
 </settings>
-<grid distance="0.01" unitdist="mm" unit="mm" style="lines" multiple="1" display="no" altdistance="0.025" altunitdist="inch" altunit="mm"/>
+<grid distance="1" unitdist="mm" unit="mm" style="lines" multiple="1" display="no" altdistance="0.1" altunitdist="mm" altunit="mm"/>
 <layers>
 <layer number="1" name="Top" color="4" fill="1" visible="yes" active="yes"/>
 <layer number="16" name="Bottom" color="1" fill="1" visible="yes" active="yes"/>
@@ -38,8 +38,8 @@
 <layer number="42" name="bRestrict" color="1" fill="10" visible="no" active="yes"/>
 <layer number="43" name="vRestrict" color="2" fill="10" visible="no" active="yes"/>
 <layer number="44" name="Drills" color="7" fill="1" visible="no" active="yes"/>
-<layer number="45" name="Holes" color="7" fill="1" visible="no" active="yes"/>
-<layer number="46" name="Milling" color="3" fill="1" visible="no" active="yes"/>
+<layer number="45" name="Holes" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="46" name="Milling" color="3" fill="1" visible="yes" active="yes"/>
 <layer number="47" name="Measures" color="7" fill="1" visible="no" active="yes"/>
 <layer number="48" name="Document" color="7" fill="1" visible="no" active="yes"/>
 <layer number="49" name="Reference" color="7" fill="1" visible="no" active="yes"/>
@@ -105,11 +105,9 @@
 <board>
 <plain>
 <wire x1="0" y1="0" x2="60" y2="0" width="0" layer="20"/>
-<wire x1="60" y1="0" x2="60" y2="70" width="0" layer="20"/>
-<wire x1="60" y1="70" x2="0" y2="70" width="0" layer="20"/>
-<wire x1="0" y1="70" x2="0" y2="0" width="0" layer="20"/>
-<text x="47.32" y="43.31" size="1.016" layer="25" font="vector">Inductor</text>
-<text x="28.79" y="25.06" size="1.27" layer="25" rot="R180">1</text>
+<wire x1="60" y1="0" x2="60" y2="80" width="0" layer="20"/>
+<wire x1="60" y1="80" x2="0" y2="80" width="0" layer="20"/>
+<wire x1="0" y1="80" x2="0" y2="0" width="0" layer="20"/>
 <text x="12.07" y="2.87" size="1.778" layer="25" font="vector">e.quinox Battery Box 2012</text>
 <text x="20.49" y="58.43" size="1.778" layer="25">G</text>
 <text x="18.18" y="58.43" size="1.778" layer="25">D</text>
@@ -1508,6 +1506,15 @@ diameter 2.54 mm, horizontal, grid 10.16 mm</description>
 <rectangle x1="2.2949" y1="2" x2="2.7851" y2="3.1001" layer="51"/>
 <rectangle x1="1.0249" y1="2" x2="1.5151" y2="3.1001" layer="51"/>
 </package>
+<package name="PCBMOUNT">
+<hole x="0" y="0" drill="3.2"/>
+<wire x1="-6.35" y1="-6.35" x2="-6.35" y2="6.35" width="0.127" layer="21"/>
+<wire x1="-6.35" y1="-6.35" x2="6.35" y2="-6.35" width="0.127" layer="21"/>
+<wire x1="6.35" y1="-6.35" x2="6.35" y2="6.35" width="0.127" layer="21"/>
+<wire x1="-6.35" y1="6.35" x2="6.35" y2="6.35" width="0.127" layer="21"/>
+<circle x="0" y="0" radius="2.236065625" width="0.127" layer="21"/>
+<wire x1="5.1" y1="6.3" x2="5.1" y2="-6.3" width="0.127" layer="21"/>
+</package>
 </packages>
 </library>
 <library name="con-kycon">
@@ -1901,36 +1908,38 @@ einem neuen Namen ab.</description>
 </pass>
 </autorouter>
 <elements>
-<element name="R1" library="rcl" package="R0805" value="20k" x="24.93" y="38.54" rot="R90"/>
-<element name="R2" library="rcl" package="R0805" value="10k" x="41.74" y="18.96" rot="R180"/>
-<element name="C1" library="rcl" package="C0805" value="1u" x="41.7" y="12.82"/>
-<element name="R13" library="rcl" package="R0805" value="500" x="31.06" y="38.57" rot="R90"/>
-<element name="R3" library="rcl" package="R0805" value="1k" x="18.67" y="7.95" rot="R180"/>
-<element name="R4" library="rcl" package="R0805" value="100k" x="18.34" y="38.51" rot="R270"/>
-<element name="IC1" library="linear" package="DIL08" value="LM2574N-5.0" x="49.01" y="53.7" smashed="yes" rot="R180">
-<attribute name="VALUE" x="53.896" y="60.175" size="1.27" layer="27" ratio="10" rot="R180"/>
+<element name="R1" library="rcl" package="R0805" value="20k" x="6.93" y="51.54" rot="R90"/>
+<element name="R2" library="rcl" package="R0805" value="10k" x="6.74" y="23.96" rot="R180"/>
+<element name="C1" library="rcl" package="C0805" value="1u" x="2.7" y="22.82"/>
+<element name="R13" library="rcl" package="R0805" value="500" x="8.06" y="49.57" rot="R90"/>
+<element name="R3" library="rcl" package="R0805" value="1k" x="8.67" y="17.95" rot="R180"/>
+<element name="R4" library="rcl" package="R0805" value="100k" x="8.34" y="49.51" rot="R270"/>
+<element name="IC1" library="linear" package="DIL08" value="LM2574N-5.0" x="8.01" y="52.7" smashed="yes" rot="R180">
+<attribute name="VALUE" x="12.896" y="59.175" size="1.27" layer="27" ratio="10" rot="R180"/>
 </element>
-<element name="CIN" library="capacitor-wima" package="C2.5-2" value="22u" x="38.31" y="39.42" rot="R270"/>
-<element name="CIN_PIC" library="rcl" package="C0805" value="1u" x="38.31" y="32.03" rot="R270"/>
-<element name="R5" library="rcl" package="R0805" value="1k" x="18.73" y="16.48"/>
-<element name="R8" library="rcl" package="R0805" value="1k" x="18.66" y="12.15"/>
-<element name="5VOUTPUT" library="diode" package="DO204-10" value="1N5059" x="38.34" y="53.88" smashed="yes" rot="R90"/>
-<element name="DCHARGE" library="diode" package="DO204" value="DO204-AR" x="20.18" y="46.92"/>
-<element name="NMOS" library="transistor-fet" package="TO92" value="BSS101" x="20.17" y="22.08" smashed="yes" rot="R180">
-<attribute name="NAME" x="22.935" y="25.805" size="1.27" layer="25" ratio="10" rot="R180"/>
-</element>
-<element name="INDUCTOR" library="inductor" package="INDUCTOR" value="EQBX_INDUCTOR2" x="49.45" y="41.61" rot="R180"/>
-<element name="PMOS" library="PMOS" package="NMOS_IPAK" value="PMOS" x="18.87" y="55.67" rot="R180"/>
-<element name="COUT" library="capacitor-wima" package="C5B5.5" value="220uF" x="29.85" y="57.1" rot="R270"/>
-<element name="D1" library="diode" package="DO41-10" value="1N4004" x="22.75" y="29.5" rot="R180"/>
-<element name="U$1" library="equinox" package="EQUINOX_LOGO_SMALL" value="EQUINOX_LOGO_SMALL" x="69.73" y="12.52"/>
-<element name="U$2" library="equinox" package="KYCON_KLVDX_2020_B" value="KYCON_KLDVX-0202" x="7.85" y="-10.27"/>
-<element name="U$3" library="equinox" package="KYCON_KLVDX_2020_B" value="KYCON_KLDVX-0202" x="7.85" y="-22.12"/>
-<element name="X2" library="con-kycon" package="KUSBVX" value="KUSBVX" x="8.4" y="-30.54"/>
-<element name="R6" library="rcl" package="R0805" value="" x="1.8" y="-38.28"/>
-<element name="LD1" library="led" package="DUOLED-C-5MM" value="" x="3.37" y="-43.53"/>
-<element name="J1" library="equinox" package="HEADER_PRG_1X05" value="CON_HEADER_PRG_PIC_ICSPA" x="6.66" y="-49.87"/>
-<element name="U$4" library="equinox" package="SO-14" value="PIC16F1503SOIC" x="6.07" y="-58.17"/>
+<element name="CIN" library="capacitor-wima" package="C2.5-2" value="22u" x="8.31" y="52.42" rot="R270"/>
+<element name="CIN_PIC" library="rcl" package="C0805" value="1u" x="6.31" y="50.03" rot="R270"/>
+<element name="R5" library="rcl" package="R0805" value="1k" x="5.73" y="27.48"/>
+<element name="R8" library="rcl" package="R0805" value="1k" x="8.66" y="22.15"/>
+<element name="5VOUTPUT" library="diode" package="DO204-10" value="1N5059" x="9.34" y="52.88" smashed="yes" rot="R90"/>
+<element name="DCHARGE" library="diode" package="DO204" value="DO204-AR" x="2.18" y="50.92"/>
+<element name="NMOS" library="transistor-fet" package="TO92" value="BSS101" x="11.17" y="39.08" smashed="yes" rot="R180"/>
+<element name="INDUCTOR" library="inductor" package="INDUCTOR" value="EQBX_INDUCTOR2" x="6.45" y="51.61" rot="R180"/>
+<element name="PMOS" library="PMOS" package="NMOS_IPAK" value="PMOS" x="6.87" y="54.67" rot="R180"/>
+<element name="COUT" library="capacitor-wima" package="C5B5.5" value="220uF" x="6.85" y="51.1" rot="R270"/>
+<element name="D1" library="diode" package="DO41-10" value="1N4004" x="6.75" y="48.5" rot="R180"/>
+<element name="U$1" library="equinox" package="EQUINOX_LOGO_SMALL" value="EQUINOX_LOGO_SMALL" x="5.73" y="70.52"/>
+<element name="U$2" library="equinox" package="KYCON_KLVDX_2020_B" value="KYCON_KLDVX-0202" x="38.85" y="14.73" rot="MR0"/>
+<element name="U$3" library="equinox" package="KYCON_KLVDX_2020_B" value="KYCON_KLDVX-0202" x="17.85" y="14.88" rot="MR0"/>
+<element name="X2" library="con-kycon" package="KUSBVX" value="KUSBVX" x="30" y="32" rot="MR0"/>
+<element name="R6" library="rcl" package="R0805" value="" x="42.8" y="56.72"/>
+<element name="LD1" library="led" package="DUOLED-C-5MM" value="" x="30" y="46"/>
+<element name="J1" library="equinox" package="HEADER_PRG_1X05" value="CON_HEADER_PRG_PIC_ICSPA" x="48.66" y="37.13"/>
+<element name="U$4" library="equinox" package="SO-14" value="PIC16F1503SOIC" x="53.07" y="48.83"/>
+<element name="U$5" library="equinox" package="PCBMOUNT" value="PCB_MOUNT_RICHO" x="54" y="6" rot="MR0"/>
+<element name="U$6" library="equinox" package="PCBMOUNT" value="PCB_MOUNT_RICHO" x="6" y="6" rot="MR0"/>
+<element name="U$7" library="equinox" package="PCBMOUNT" value="PCB_MOUNT_RICHO" x="54" y="74" rot="MR0"/>
+<element name="U$8" library="equinox" package="PCBMOUNT" value="PCB_MOUNT_RICHO" x="6" y="74" rot="MR0"/>
 </elements>
 <signals>
 <signal name="VDD">
@@ -1939,41 +1948,41 @@ einem neuen Namen ab.</description>
 <contactref element="D1" pad="C"/>
 <contactref element="J1" pad="2"/>
 <contactref element="U$4" pad="1"/>
-<wire x1="31.06" y1="37.62" x2="38.31" y2="32.98" width="0" layer="19" extent="1-1"/>
-<wire x1="27.83" y1="29.5" x2="31.06" y2="37.62" width="0" layer="19" extent="1-1"/>
-<wire x1="4.12" y1="-49.87" x2="27.83" y2="29.5" width="0" layer="19" extent="1-1"/>
-<wire x1="2.26" y1="-60.77" x2="4.12" y2="-49.87" width="0" layer="19" extent="1-1"/>
+<wire x1="8.06" y1="48.62" x2="6.31" y2="50.98" width="0" layer="19" extent="1-1"/>
+<wire x1="11.83" y1="48.5" x2="8.06" y2="48.62" width="0" layer="19" extent="1-1"/>
+<wire x1="46.12" y1="37.13" x2="11.83" y2="48.5" width="0" layer="19" extent="1-1"/>
+<wire x1="49.26" y1="46.23" x2="46.12" y2="37.13" width="0" layer="19" extent="1-1"/>
 </signal>
 <signal name="N$9">
 <contactref element="R4" pad="2"/>
 <contactref element="PMOS" pad="G"/>
 <contactref element="NMOS" pad="3"/>
-<wire x1="18.34" y1="37.56" x2="21.15" y2="55.67" width="0" layer="19" extent="1-1"/>
-<wire x1="21.44" y1="22.08" x2="18.34" y2="37.56" width="0" layer="19" extent="1-1"/>
+<wire x1="8.34" y1="48.56" x2="9.15" y2="54.67" width="0" layer="19" extent="1-1"/>
+<wire x1="12.44" y1="39.08" x2="8.34" y2="48.56" width="0" layer="19" extent="1-1"/>
 </signal>
 <signal name="N$15">
 <contactref element="R8" pad="2"/>
 <contactref element="U$4" pad="6"/>
-<wire x1="19.61" y1="12.15" x2="8.61" y2="-60.77" width="0" layer="19" extent="1-1"/>
+<wire x1="9.61" y1="22.15" x2="55.61" y2="46.23" width="0" layer="19" extent="1-1"/>
 </signal>
 <signal name="N$3">
 <contactref element="R2" pad="2"/>
 <contactref element="R1" pad="1"/>
 <contactref element="C1" pad="1"/>
 <contactref element="U$4" pad="11"/>
-<wire x1="40.75" y1="12.82" x2="40.79" y2="18.96" width="0" layer="19" extent="1-1"/>
-<wire x1="24.93" y1="37.59" x2="40.79" y2="18.96" width="0" layer="19" extent="1-1"/>
-<wire x1="6.07" y1="-55.57" x2="40.75" y2="12.82" width="0" layer="19" extent="1-1"/>
+<wire x1="1.75" y1="22.82" x2="5.79" y2="23.96" width="0" layer="19" extent="1-1"/>
+<wire x1="6.93" y1="50.59" x2="5.79" y2="23.96" width="0" layer="19" extent="1-1"/>
+<wire x1="53.07" y1="51.43" x2="1.75" y2="22.82" width="0" layer="19" extent="1-1"/>
 </signal>
 <signal name="N$8">
 <contactref element="R5" pad="2"/>
 <contactref element="U$4" pad="5"/>
-<wire x1="19.68" y1="16.48" x2="7.34" y2="-60.77" width="0" layer="19" extent="1-1"/>
+<wire x1="6.68" y1="27.48" x2="54.34" y2="46.23" width="0" layer="19" extent="1-1"/>
 </signal>
 <signal name="N$13">
 <contactref element="NMOS" pad="2"/>
 <contactref element="R3" pad="1"/>
-<wire x1="19.62" y1="7.95" x2="20.17" y2="20.175" width="0" layer="19" extent="1-1"/>
+<wire x1="9.62" y1="17.95" x2="11.17" y2="37.175" width="0" layer="19" extent="1-1"/>
 </signal>
 <signal name="N$20" class="1">
 <contactref element="CIN" pad="1"/>
@@ -1982,23 +1991,11 @@ einem neuen Namen ab.</description>
 <contactref element="DCHARGE" pad="POSITIVE"/>
 <contactref element="U$2" pad="1"/>
 <contactref element="U$3" pad="1"/>
-<wire x1="38.31" y1="40.69" x2="45.2" y2="49.89" width="0" layer="19" extent="1-1"/>
-<wire x1="31.18" y1="46.92" x2="38.31" y2="40.69" width="0" layer="19" extent="1-1"/>
-<wire x1="18.87" y1="55.67" x2="31.18" y2="46.92" width="0" layer="19" extent="1-1"/>
-<wire x1="1.43" y1="-2.92" x2="38.31" y2="40.69" width="0" layer="19" extent="1-1"/>
-<wire x1="1.43" y1="-14.77" x2="1.43" y2="-2.92" width="0" layer="19" extent="1-1"/>
-</signal>
-<signal name="S$1">
-<via x="5" y="65" extent="1-16" drill="3.2" diameter="1.27"/>
-</signal>
-<signal name="S$2">
-<via x="55" y="65" extent="1-16" drill="3.2" diameter="1.27"/>
-</signal>
-<signal name="S$3">
-<via x="5" y="5" extent="1-16" drill="3.2" diameter="1.27"/>
-</signal>
-<signal name="S$4">
-<via x="55" y="5" extent="1-16" drill="3.2" diameter="1.27"/>
+<wire x1="8.31" y1="53.69" x2="4.2" y2="48.89" width="0" layer="19" extent="1-1"/>
+<wire x1="13.18" y1="50.92" x2="8.31" y2="53.69" width="0" layer="19" extent="1-1"/>
+<wire x1="6.87" y1="54.67" x2="13.18" y2="50.92" width="0" layer="19" extent="1-1"/>
+<wire x1="45.27" y1="22.08" x2="8.31" y2="53.69" width="0" layer="19" extent="1-1"/>
+<wire x1="24.27" y1="22.23" x2="45.27" y2="22.08" width="0" layer="19" extent="1-1"/>
 </signal>
 <signal name="GND" class="1">
 <contactref element="R2" pad="1"/>
@@ -2006,14 +2003,14 @@ einem neuen Namen ab.</description>
 <contactref element="NMOS" pad="1"/>
 <contactref element="D1" pad="A"/>
 <polygon width="0.4064" layer="16">
-<vertex x="0" y="70"/>
-<vertex x="60" y="70"/>
+<vertex x="0" y="80"/>
+<vertex x="60" y="80"/>
 <vertex x="60" y="0"/>
 <vertex x="0" y="0"/>
 </polygon>
 <polygon width="0.4064" layer="1">
-<vertex x="0" y="70"/>
-<vertex x="60" y="70"/>
+<vertex x="0" y="80"/>
+<vertex x="60" y="80"/>
 <vertex x="60" y="0"/>
 <vertex x="0" y="0"/>
 </polygon>
@@ -2031,30 +2028,30 @@ einem neuen Namen ab.</description>
 <contactref element="X2" pad="4"/>
 <contactref element="X2" pad="M1"/>
 <contactref element="X2" pad="M2"/>
-<wire x1="47.74" y1="57.51" x2="50.28" y2="57.51" width="0" layer="19" extent="1-1"/>
-<wire x1="45.2" y1="57.51" x2="47.74" y2="57.51" width="0" layer="19" extent="1-1"/>
-<wire x1="38.34" y1="58.96" x2="45.2" y2="57.51" width="0" layer="19" extent="1-1"/>
-<wire x1="29.85" y1="54.56" x2="38.34" y2="58.96" width="0" layer="19" extent="1-1"/>
-<wire x1="38.31" y1="38.15" x2="29.85" y2="54.56" width="0" layer="19" extent="1-1"/>
-<wire x1="38.31" y1="31.08" x2="38.31" y2="38.15" width="0" layer="19" extent="1-1"/>
-<wire x1="42.69" y1="18.96" x2="38.31" y2="31.08" width="0" layer="19" extent="1-1"/>
-<wire x1="42.65" y1="12.82" x2="42.69" y2="18.96" width="0" layer="19" extent="1-1"/>
-<wire x1="17.67" y1="29.5" x2="38.31" y2="31.08" width="0" layer="19" extent="1-1"/>
-<wire x1="18.9" y1="22.08" x2="17.67" y2="29.5" width="0" layer="19" extent="1-1"/>
-<wire x1="14.97" y1="-27.83" x2="42.65" y2="12.82" width="0" layer="19" extent="1-1"/>
-<wire x1="4.9" y1="-30.54" x2="14.97" y2="-27.83" width="0" layer="19" extent="1-1"/>
-<wire x1="1.83" y1="-27.83" x2="4.9" y2="-30.54" width="0" layer="19" extent="1-1"/>
-<wire x1="0.85" y1="-38.28" x2="4.9" y2="-30.54" width="0" layer="19" extent="1-1"/>
-<wire x1="3.37" y1="-43.53" x2="0.85" y2="-38.28" width="0" layer="19" extent="1-1"/>
-<wire x1="6.66" y1="-49.87" x2="3.37" y2="-43.53" width="0" layer="19" extent="1-1"/>
-<wire x1="2.26" y1="-55.57" x2="6.66" y2="-49.87" width="0" layer="19" extent="1-1"/>
+<wire x1="6.74" y1="56.51" x2="9.28" y2="56.51" width="0" layer="19" extent="1-1"/>
+<wire x1="4.2" y1="56.51" x2="6.74" y2="56.51" width="0" layer="19" extent="1-1"/>
+<wire x1="9.34" y1="57.96" x2="4.2" y2="56.51" width="0" layer="19" extent="1-1"/>
+<wire x1="6.85" y1="48.56" x2="9.34" y2="57.96" width="0" layer="19" extent="1-1"/>
+<wire x1="8.31" y1="51.15" x2="6.85" y2="48.56" width="0" layer="19" extent="1-1"/>
+<wire x1="6.31" y1="49.08" x2="8.31" y2="51.15" width="0" layer="19" extent="1-1"/>
+<wire x1="7.69" y1="23.96" x2="6.31" y2="49.08" width="0" layer="19" extent="1-1"/>
+<wire x1="3.65" y1="22.82" x2="7.69" y2="23.96" width="0" layer="19" extent="1-1"/>
+<wire x1="1.67" y1="48.5" x2="6.31" y2="49.08" width="0" layer="19" extent="1-1"/>
+<wire x1="9.9" y1="39.08" x2="1.67" y2="48.5" width="0" layer="19" extent="1-1"/>
+<wire x1="23.43" y1="34.71" x2="3.65" y2="22.82" width="0" layer="19" extent="1-1"/>
+<wire x1="33.5" y1="32" x2="23.43" y2="34.71" width="0" layer="19" extent="1-1"/>
+<wire x1="36.57" y1="34.71" x2="33.5" y2="32" width="0" layer="19" extent="1-1"/>
+<wire x1="41.85" y1="56.72" x2="33.5" y2="32" width="0" layer="19" extent="1-1"/>
+<wire x1="30" y1="46" x2="41.85" y2="56.72" width="0" layer="19" extent="1-1"/>
+<wire x1="48.66" y1="37.13" x2="30" y2="46" width="0" layer="19" extent="1-1"/>
+<wire x1="49.26" y1="51.43" x2="48.66" y2="37.13" width="0" layer="19" extent="1-1"/>
 </signal>
 <signal name="N$11">
 <contactref element="IC1" pad="7"/>
 <contactref element="INDUCTOR" pad="P$1"/>
 <contactref element="5VOUTPUT" pad="C"/>
-<wire x1="46.95" y1="41.61" x2="50.28" y2="49.89" width="0" layer="19" extent="1-1"/>
-<wire x1="38.34" y1="48.8" x2="46.95" y2="41.61" width="0" layer="19" extent="1-1"/>
+<wire x1="3.95" y1="51.61" x2="9.28" y2="48.89" width="0" layer="19" extent="1-1"/>
+<wire x1="9.34" y1="47.8" x2="3.95" y2="51.61" width="0" layer="19" extent="1-1"/>
 </signal>
 <signal name="V_BATT" class="1">
 <contactref element="R13" pad="2"/>
@@ -2062,18 +2059,15 @@ einem neuen Namen ab.</description>
 <contactref element="R1" pad="2"/>
 <contactref element="PMOS" pad="S"/>
 <contactref element="DCHARGE" pad="NEGATIVE"/>
-<wire x1="24.93" y1="39.49" x2="31.06" y2="39.52" width="0" layer="19" extent="1-1"/>
-<wire x1="18.34" y1="39.46" x2="24.93" y2="39.49" width="0" layer="19" extent="1-1"/>
-<wire x1="20.18" y1="46.92" x2="18.34" y2="39.46" width="0" layer="19" extent="1-1"/>
-<wire x1="16.59" y1="55.67" x2="20.18" y2="46.92" width="0" layer="19" extent="1-1"/>
-</signal>
-<signal name="N$18">
-<wire x1="54.5" y1="65.5" x2="54.5" y2="67" width="0.4064" layer="1"/>
+<wire x1="6.93" y1="52.49" x2="8.06" y2="50.52" width="0" layer="19" extent="1-1"/>
+<wire x1="8.34" y1="50.46" x2="6.93" y2="52.49" width="0" layer="19" extent="1-1"/>
+<wire x1="2.18" y1="50.92" x2="8.34" y2="50.46" width="0" layer="19" extent="1-1"/>
+<wire x1="4.59" y1="54.67" x2="2.18" y2="50.92" width="0" layer="19" extent="1-1"/>
 </signal>
 <signal name="N$2">
 <contactref element="R5" pad="1"/>
 <contactref element="LD1" pad="AX"/>
-<wire x1="17.78" y1="16.48" x2="0.83" y2="-43.53" width="0" layer="19" extent="1-1"/>
+<wire x1="4.78" y1="27.48" x2="27.46" y2="46" width="0" layer="19" extent="1-1"/>
 </signal>
 <signal name="N$1">
 <contactref element="U$2" pad="3"/>
@@ -2081,24 +2075,24 @@ einem neuen Namen ab.</description>
 <contactref element="U$3" pad="2"/>
 <contactref element="U$2" pad="2"/>
 <contactref element="R6" pad="2"/>
-<wire x1="6.12" y1="-21.77" x2="2.75" y2="-38.28" width="0" layer="19" extent="1-1"/>
-<wire x1="8.95" y1="-18.95" x2="6.12" y2="-21.77" width="0" layer="19" extent="1-1"/>
-<wire x1="6.12" y1="-9.92" x2="8.95" y2="-18.95" width="0" layer="19" extent="1-1"/>
-<wire x1="8.95" y1="-7.1" x2="6.12" y2="-9.92" width="0" layer="19" extent="1-1"/>
+<wire x1="19.58" y1="15.23" x2="43.75" y2="56.72" width="0" layer="19" extent="1-1"/>
+<wire x1="16.75" y1="18.05" x2="19.58" y2="15.23" width="0" layer="19" extent="1-1"/>
+<wire x1="40.58" y1="15.08" x2="16.75" y2="18.05" width="0" layer="19" extent="1-1"/>
+<wire x1="37.75" y1="17.9" x2="40.58" y2="15.08" width="0" layer="19" extent="1-1"/>
 </signal>
 <signal name="N$4" class="1">
 <contactref element="IC1" pad="1"/>
 <contactref element="INDUCTOR" pad="P$2"/>
 <contactref element="COUT" pad="1"/>
 <contactref element="X2" pad="1"/>
-<wire x1="51.95" y1="41.61" x2="52.82" y2="57.51" width="0" layer="19" extent="1-1"/>
-<wire x1="29.85" y1="59.64" x2="52.82" y2="57.51" width="0" layer="19" extent="1-1"/>
-<wire x1="11.9" y1="-30.54" x2="51.95" y2="41.61" width="0" layer="19" extent="1-1"/>
+<wire x1="8.95" y1="51.61" x2="11.82" y2="56.51" width="0" layer="19" extent="1-1"/>
+<wire x1="6.85" y1="53.64" x2="11.82" y2="56.51" width="0" layer="19" extent="1-1"/>
+<wire x1="26.5" y1="32" x2="8.95" y2="51.61" width="0" layer="19" extent="1-1"/>
 </signal>
 <signal name="N$17">
 <contactref element="R8" pad="1"/>
 <contactref element="LD1" pad="AR"/>
-<wire x1="17.71" y1="12.15" x2="5.91" y2="-43.53" width="0" layer="19" extent="1-1"/>
+<wire x1="7.71" y1="22.15" x2="32.54" y2="46" width="0" layer="19" extent="1-1"/>
 </signal>
 <signal name="MCLR-">
 <contactref element="J1" pad="1"/>
@@ -2112,7 +2106,7 @@ einem neuen Namen ab.</description>
 <signal name="N$5">
 <contactref element="R3" pad="2"/>
 <contactref element="U$4" pad="7"/>
-<wire x1="17.72" y1="7.95" x2="9.88" y2="-60.77" width="0" layer="19" extent="1-1"/>
+<wire x1="7.72" y1="17.95" x2="56.88" y2="46.23" width="0" layer="19" extent="1-1"/>
 </signal>
 </signals>
 </board>

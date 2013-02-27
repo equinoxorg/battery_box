@@ -9290,6 +9290,10 @@ uC to turn off after timeout or extreme LVDC </text>
 <text x="83.82" y="-10.16" size="1.778" layer="98" rot="R90">Add simple error checking to code</text>
 <text x="88.9" y="-12.7" size="1.778" layer="98" rot="R90">Add charging LED status</text>
 <text x="-81.28" y="86.36" size="1.778" layer="98" rot="R270">Molex connector to crimped battery</text>
+<text x="-12.7" y="111.76" size="1.778" layer="98">Check how the V_drop affects the charging 
+off the battery. Possibly change how the 
+charging works.</text>
+<text x="165.1" y="104.14" size="1.778" layer="98">Add Voltage Sense to outputs to check for charging voltage</text>
 </plain>
 <instances>
 <instance part="R1" gate="G$1" x="-27.94" y="35.56" rot="R90"/>
