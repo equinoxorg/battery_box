@@ -8560,6 +8560,8 @@ W = angled&lt;p&gt;
 <text x="190.5" y="7.62" size="1.778" layer="98">PCB Mounts</text>
 <text x="294.64" y="27.94" size="1.778" layer="98">Added e.quinox logo</text>
 <text x="45.72" y="66.04" size="1.778" layer="98" rot="R90">Change to 3.3V</text>
+<text x="43.18" y="66.04" size="1.778" layer="98" rot="R90">2069436</text>
+<text x="190.5" y="116.84" size="3.81" layer="98">Need to change to cheaper op amp</text>
 </plain>
 <instances>
 <instance part="GND1" gate="1" x="134.62" y="43.18"/>
