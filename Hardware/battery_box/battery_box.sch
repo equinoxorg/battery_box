@@ -8646,13 +8646,6 @@ W = angled&lt;p&gt;
 <junction x="78.74" y="119.38"/>
 </segment>
 <segment>
-<pinref part="IC1" gate="P" pin="V+"/>
-<wire x1="213.36" y1="106.68" x2="213.36" y2="111.76" width="0.1524" layer="91"/>
-<pinref part="R12" gate="G$1" pin="1"/>
-<wire x1="200.66" y1="111.76" x2="213.36" y2="111.76" width="0.1524" layer="91"/>
-<label x="203.2" y="111.76" size="1.778" layer="95"/>
-</segment>
-<segment>
 <pinref part="DATA_OUT" gate="1" pin="4"/>
 <wire x1="76.2" y1="25.4" x2="91.44" y2="25.4" width="0.1524" layer="91"/>
 <label x="83.82" y="25.4" size="1.778" layer="95"/>
@@ -8799,6 +8792,13 @@ W = angled&lt;p&gt;
 <wire x1="292.1" y1="165.1" x2="292.1" y2="162.56" width="0.1524" layer="91"/>
 <label x="302.26" y="165.1" size="1.778" layer="95"/>
 <junction x="292.1" y="165.1"/>
+</segment>
+<segment>
+<pinref part="IC1" gate="P" pin="V+"/>
+<wire x1="213.36" y1="106.68" x2="213.36" y2="111.76" width="0.1524" layer="91"/>
+<pinref part="R12" gate="G$1" pin="1"/>
+<wire x1="200.66" y1="111.76" x2="213.36" y2="111.76" width="0.1524" layer="91"/>
+<label x="203.2" y="111.76" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="N$3" class="0">
