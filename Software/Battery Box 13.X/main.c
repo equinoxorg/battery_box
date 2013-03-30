@@ -85,12 +85,12 @@ char state = STATE_ON;
 
 //Function definitions
 void init_hardware();
-unsigned char read_ADC(char);
+uint16_t read_ADC(char);
 
 void main(void)
 {
-    unsigned int adc_average;
-    unsigned char adc_result, i;
+    uint16_t adc_average;
+    uint16_t adc_result, i;
 
     init_hardware();
 
@@ -161,29 +161,27 @@ void init_hardware(void) {
     PORTC &= ~(LEDG_PIN | LVCO_PIN);
     PORTC |= LEDR_PIN;
 
+    //Set up adc
+    ADCON1 = 0b10100000;
+
+    //Enable the b_sense pin as analogue input
+    ANSELA |= 1 << 3;
+
 }
 
-unsigned char read_ADC(char pin) {
+uint16_t read_ADC(unsigned char adc_channel) {
 
-    //Set up all AN pins as ADC inputs
-    //Use Fosc/16 as clock for low power
-    //Select correct input based on value passed in
-    //Turn on ADC
-    switch (pin) {
-        case 0:
-            ADCON0 = 0b11000001;
-            break;
-        case 1:
-            ADCON0 = 0b11000101;
-            break;
-        case 2:
-            ADCON0 = 0b11001001;
-            break;
-    }
+    // Clear the adc Channel
+    ADCON0 &= ~0b01111100;
 
+    // Set up ADC with correct Channel
+    ADCON0 |= (adc_channel & 0b00011111) << 2;
+
+    //Enable the ADC
+    ADCON0 |= 0x01;
 
     //Start the conversion
-    ADCON0 |= 0x2;
+    ADCON0 |= 0x02;
 
     //Wait for conversion to finish
     while (ADCON0 & 0b00000010);
@@ -191,7 +189,8 @@ unsigned char read_ADC(char pin) {
     //Turn off ADC to save power
     ADCON0 = 0b11000000;
 
-    return ADRES;
+    //Return the 10 bit results made into a 16 bit int
+    return ( (uint16_t)ADRESH << 8) & ADRESL ;
     
 }
 
