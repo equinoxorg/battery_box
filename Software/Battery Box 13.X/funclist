@@ -1,4 +1,4 @@
-_init_hardware: CODE, 1787 0 10
-_main: CODE, 1836 0 212
-_read_ADC: CODE, 1797 0 39
-Total: 261
+_init_hardware: CODE, 1764 0 15
+_main: CODE, 1824 0 224
+_read_ADC: CODE, 1779 0 45
+Total: 284

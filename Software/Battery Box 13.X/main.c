@@ -190,7 +190,7 @@ uint16_t read_ADC(unsigned char adc_channel) {
     ADCON0 = 0b11000000;
 
     //Return the 10 bit results made into a 16 bit int
-    return ( (uint16_t)ADRESH << 8) & ADRESL ;
+    return ( (uint16_t)ADRESH << 8) | ADRESL ;
     
 }
 
