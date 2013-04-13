@@ -24,10 +24,10 @@
  |	VCC         |1      14| GND
  |                  |2      13|
  |                  |3      12|
- |                  |4      11| B_SENSE (Stepdown to 0-5V)
- |	LED_R       |5      10|
- |	LED_G       |6       9|
- |	LV CUTOFF   |7       8|
+ |                  |4      11| B_SENSE (Stepdown to 0-5V)  (RA2/AN2)
+ |(RC5)	LED_R       |5      10| I_SENSE                     (RC0/AN4)
+ |(RC4)	LED_G       |6       9|
+ |(RC3)	LV CUTOFF   |7       8|
  |                  -----------
  | 	LV_CUTOFF controls the MOSFET which turns off the output power
  |	B_SENSE is the battery voltage, steoped down to 1/3 of its normal value
@@ -59,11 +59,13 @@ __CONFIG(WRT_OFF & PLLEN_ON & STVREN_ON & BORV_LO & LVP_ON);
 
 //Analogue input pins
 #define B_SENSE_INPUT	2
+#define I_SENSE_INPUT   4       //or should this be 0?
 
 #define FULL_BATT_VOLTAGE       ((float) 14.0)
 #define CUTOFF_VOLTAGE          ((float) 10.9)
 #define VCC_5V_SUPPLY           ((float) 5.15)
 #define LOW_BATT_PERCENTAGE     ((float) 0.25)
+#define MIN_CHARGING_CURRENT    ((uint8_t) 100)
 
 //Converts the above levels to ADC values - [DONT EDIT]
 //#define LOW_BATT_LEVEL	0xC4
@@ -81,8 +83,8 @@ __CONFIG(WRT_OFF & PLLEN_ON & STVREN_ON & BORV_LO & LVP_ON);
 #define POLL_INTERVAL_MS 10
 
 //Global Variable
-char state = STATE_ON;
-
+char state;
+char eeprom_readdata;
 //Function definitions
 void init_hardware();
 uint16_t read_ADC(char);
@@ -95,57 +97,79 @@ void main(void)
     init_hardware();
 
     __delay_ms(500);
+    //EEPROM Test Code
+//    while (1)
+//    {
+//        eeprom_write("F001h", 0);
+//        eeprom_readdata = eeprom_read("F001h");
+//        if (eeprom_readdata == 1)
+//        {
+//            PORTC |= (LEDR_PIN | LEDG_PIN | LVCO_PIN);
+//            __delay_ms(100);
+//            PORTC &= ~(LEDR_PIN | LEDG_PIN | LVCO_PIN);
+//            __delay_ms(100);
+//        }
+//        else
+//        {
+//            PORTC |= (LEDR_PIN);
+//            __delay_ms(100);
+//            PORTC &= ~(LEDR_PIN);
+//            __delay_ms(100);
+//        }
+//    }
+    eeprom_readdata = eeprom_read("F001h");
+    if (eeprom_readdata == 1)
+    {
+        state = STATE_OFF;
+    }
     while (1)
     {
-        PORTC = ~LEDG_PIN;
-        __delay_ms(500);
-        PORTC = LEDG_PIN;
-        __delay_ms(500);
-        PORTC = LEDR_PIN;
-        __delay_ms(500);
-        PORTC = ~LEDR_PIN;
-        __delay_ms(500);
-    }
-
-    while (1) {
-
-        //Read the ADC and oversamples to improve accuracy
-        adc_average = 0;
-        for (i = 0; i < ADC_OVERSAMPLES; i++)
-            adc_average += read_ADC(B_SENSE_INPUT);
-
-        //Averages the read ADC samples
-        adc_result = adc_average / ADC_OVERSAMPLES;
-
         //Processes the ADC value and switches outputs accordingly
-        switch (state) {
+        switch (state)
+        {
             case STATE_ON:
-                if (adc_result < CUTOUT_LEVEL) {
+                //Read the ADC and oversamples to improve accuracy
+                adc_average = 0;
+                for (i = 0; i < ADC_OVERSAMPLES; i++)
+                    adc_average += read_ADC(B_SENSE_INPUT);
+
+                //Averages the read ADC samples
+                adc_result = adc_average / ADC_OVERSAMPLES;
+                if (adc_result < CUTOUT_LEVEL)
+                {
                     PORTC &= ~LEDG_PIN;
                     PORTC |= LEDR_PIN;
                     PORTC &= ~LVCO_PIN;
+                    eeprom_write("F001h", 1);               //writes a 1 into EEPROM
                     state = STATE_OFF;
-                } else if (adc_result < LOW_BATT_LEVEL) {
+                } else if (adc_result < LOW_BATT_LEVEL)
+                {
                     PORTC |= (LEDR_PIN | LEDG_PIN | LVCO_PIN);
-                } else {
+                } else
+                {
                     PORTC |= ( LEDG_PIN | LVCO_PIN );
                     PORTC &= ~LEDR_PIN;
                 }
                 break;
 
             case STATE_OFF:
-                if (LOW_BATT_LEVEL < adc_result) {
-                    PORTC &= ~LEDR_PIN;
-                    PORTC |= LEDG_PIN;
-                    PORTC |= LVCO_PIN;
+                //read ISENSE code here
+                //Read the ADC and oversamples to improve accuracy
+                adc_average = 0;
+                for (i = 0; i < ADC_OVERSAMPLES; i++)
+                    adc_average += read_ADC(B_SENSE_INPUT);
+
+                //Averages the read ADC samples
+                adc_result = adc_average / ADC_OVERSAMPLES;
+                if (adc_average > MIN_CHARGING_CURRENT)
+                {
+                    eeprom_write("F001h", 0);               //writes a 1 into EEPROM
                     state = STATE_ON;
                 }
                 break;
         }
-
         //Waits a set time before reading the ADC again
         __delay_ms(POLL_INTERVAL_MS);
-
     }
 }
 
