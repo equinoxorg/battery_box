@@ -22,16 +22,17 @@
  |
  |                   __________
  |	VCC         |1      14| GND
- |                  |2      13|
- |                  |3      12|
- |                  |4      11| B_SENSE (Stepdown to 0-5V)  (RA2/AN2)
- |(RC5)	LED_R       |5      10| I_SENSE                     (RC0/AN4)
- |(RC4)	LED_G       |6       9|
- |(RC3)	LV CUTOFF   |7       8|
+ |      POW         |2      13| PGD     (Programming Pin)
+ |                  |3      12| PGC     (Programming Pin)
+ |      ~MCLR       |4      11| BATT_V (Stepdown to 0-5V)   (RA2/AN2)
+ |(RC5)	RX          |5      10| I_SENSE                     (RC0/AN4)
+ |(RC4)	TX          |6       9|
+ |                  |7       8|
  |                  -----------
- | 	LV_CUTOFF controls the MOSFET which turns off the output power
- |	B_SENSE is the battery voltage, steoped down to 1/3 of its normal value
- |
+ | 	I_SENSE is the charging current
+ |	BATT_V is the battery voltage, steoped down to 1/3 of its normal value
+ |      RX and TX are for outputting data (currently unimplemented)
+ |      POW is for putting the chip to sleep
  *----------------------------------------------------------------------------*/
 
 /*----------------------------------------TODO----------------------------------
@@ -58,10 +59,11 @@ __CONFIG(WRT_OFF & PLLEN_ON & STVREN_ON & BORV_LO & LVP_ON);
 #define LVCO_PIN	(1 << 3)
 
 //Analogue input pins
-#define B_SENSE_INPUT	2
+#define BATT_V	2
 #define I_SENSE_INPUT   4       //or should this be 0?
 
 #define FULL_BATT_VOLTAGE       ((float) 14.0)
+#define CHARGED_BATT_VOLTAGE    ((float) 13.0)
 #define CUTOFF_VOLTAGE          ((float) 10.9)
 #define VCC_5V_SUPPLY           ((float) 5.15)
 #define LOW_BATT_PERCENTAGE     ((float) 0.25)
@@ -131,24 +133,14 @@ void main(void)
                 //Read the ADC and oversamples to improve accuracy
                 adc_average = 0;
                 for (i = 0; i < ADC_OVERSAMPLES; i++)
-                    adc_average += read_ADC(B_SENSE_INPUT);
+                    adc_average += read_ADC(BATT_V);
 
                 //Averages the read ADC samples
                 adc_result = adc_average / ADC_OVERSAMPLES;
                 if (adc_result < CUTOUT_LEVEL)
                 {
-                    PORTC &= ~LEDG_PIN;
-                    PORTC |= LEDR_PIN;
-                    PORTC &= ~LVCO_PIN;
                     eeprom_write("F001h", 1);               //writes a 1 into EEPROM
                     state = STATE_OFF;
-                } else if (adc_result < LOW_BATT_LEVEL)
-                {
-                    PORTC |= (LEDR_PIN | LEDG_PIN | LVCO_PIN);
-                } else
-                {
-                    PORTC |= ( LEDG_PIN | LVCO_PIN );
-                    PORTC &= ~LEDR_PIN;
                 }
                 break;
 
@@ -157,14 +149,23 @@ void main(void)
                 //Read the ADC and oversamples to improve accuracy
                 adc_average = 0;
                 for (i = 0; i < ADC_OVERSAMPLES; i++)
-                    adc_average += read_ADC(B_SENSE_INPUT);
+                    adc_average += read_ADC(I_SENSE_INPUT);
 
                 //Averages the read ADC samples
                 adc_result = adc_average / ADC_OVERSAMPLES;
                 if (adc_average > MIN_CHARGING_CURRENT)
                 {
-                    eeprom_write("F001h", 0);               //writes a 1 into EEPROM
-                    state = STATE_ON;
+                    adc_average = 0;
+                    for (i = 0; i < ADC_OVERSAMPLES; i++)
+                        adc_average += read_ADC(BATT_V);
+
+                    //Averages the read ADC samples
+                    adc_result = adc_average / ADC_OVERSAMPLES;
+                    if (adc_average > CHARGED_BATT_VOLTAGE)
+                    {
+                        eeprom_write("F001h", 0);               //writes a 1 into EEPROM
+                        state = STATE_ON;
+                    }
                 }
                 break;
         }
