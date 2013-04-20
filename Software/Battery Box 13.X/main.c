@@ -1,7 +1,7 @@
 
 /*--------------------------- Low Voltage Cut Off ------------------------------
  | 	E.quinox battery box low voltage cutout circuit
- |  Copyright (C) 2013  Ashley Grealish - e.quinox.org
+ |  Copyright (C) 2013  Ashley Grealish & Yuchen Wang - www.e.quinox.org
  |
  |  This program is free software: you can redistribute it and/or modify
  |  it under the terms of the GNU General Public License as published by
@@ -22,7 +22,7 @@
  |
  |                   __________
  |	VCC         |1      14| GND
- |      POW         |2      13| PGD     (Programming Pin)
+ |(RA5) POW         |2      13| PGD     (Programming Pin)
  |                  |3      12| PGC     (Programming Pin)
  |      ~MCLR       |4      11| BATT_V (Stepdown to 0-5V)   (RA2/AN2)
  |(RC5)	RX          |5      10| I_SENSE                     (RC0/AN4)
@@ -79,6 +79,7 @@ __CONFIG(WRT_OFF & PLLEN_ON & STVREN_ON & BORV_LO & LVP_ON);
 //State Machine States
 #define STATE_ON 0
 #define STATE_OFF 1
+#define STATE_SLEEP 2
 
 #define ADC_OVERSAMPLES 8
 
@@ -194,7 +195,12 @@ void init_hardware(void) {
     ANSELC |= 1 << 1;
 
     //Set up the chip for interrupts
-    
+    ei();                   //enable global interrupts (test to see if this is needed
+    INTCON = 0b10001000;    //enable global interrupt (check if this bit is needed), and enable interrupt-on-change
+
+    IOCAP |= 1 << 6;        //enable interrupt-on-change for pin 5 in bank A
+
+
 }
 
 uint16_t read_ADC(unsigned char adc_channel)
@@ -223,3 +229,15 @@ uint16_t read_ADC(unsigned char adc_channel)
     
 }
 
+void interrupt ISR (void)
+{
+    if (IOCAF & 0b00100000 !=  0)
+    {
+        if (state != STATE_SLEEP)
+        {
+            PORTC = 0x0;      //Turn off output Pins
+            SLEEP();          //Sleep
+        }
+        IOCAF = 0x0;
+    }
+}
