@@ -191,10 +191,14 @@ void init_hardware(void) {
 
     //Enable the b_sense pin as analogue input
     ANSELA |= 1 << 3;
+    ANSELC |= 1 << 1;
 
+    //Set up the chip for interrupts
+    
 }
 
-uint16_t read_ADC(unsigned char adc_channel) {
+uint16_t read_ADC(unsigned char adc_channel)
+{
 
     // Clear the adc Channel
     ADCON0 &= ~0b01111100;
