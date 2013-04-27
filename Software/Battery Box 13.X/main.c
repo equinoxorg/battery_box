@@ -75,6 +75,7 @@ __CONFIG(WRT_OFF & PLLEN_ON & STVREN_ON & BORV_LO & LVP_ON);
 #define LOW_BATT_LEVEL          ( (uint8_t) ( (LOW_BATT_VOLTAGE/(float)3) / (( VCC_5V_SUPPLY /(float)255) ) ))
 //#define CUTOUT_LEVEL	0xB4
 #define CUTOUT_LEVEL            ( (uint8_t) ( (CUTOFF_VOLTAGE/(float)3)/( VCC_5V_SUPPLY / (float)255) ) )
+#define CHARGED_BATT_VOLTAGE_LEVEL    ( (uint8_t) ( (CUTOFF_VOLTAGE/(float)3)/( VCC_5V_SUPPLY / (float)255) ) )
 
 //State Machine States
 #define STATE_ON 0
@@ -125,6 +126,9 @@ void main(void)
     {
         state = STATE_OFF;
     }
+    else 
+        state = STATE_ON;
+
     while (1)
     {
         //Processes the ADC value and switches outputs accordingly
@@ -142,6 +146,10 @@ void main(void)
                 {
                     eeprom_write("F001h", 1);               //writes a 1 into EEPROM
                     state = STATE_OFF;
+
+                    //Testing:
+                    PORTC &= ~LEDG_PIN;
+                    PORTC |= LEDR_PIN;
                 }
                 break;
 
@@ -149,12 +157,12 @@ void main(void)
                 //read ISENSE code here
                 //Read the ADC and oversamples to improve accuracy
                 adc_average = 0;
-                for (i = 0; i < ADC_OVERSAMPLES; i++)
-                    adc_average += read_ADC(I_SENSE_INPUT);
+                //for (i = 0; i < ADC_OVERSAMPLES; i++)
+                   // adc_average += read_ADC(I_SENSE_INPUT);
 
                 //Averages the read ADC samples
-                adc_result = adc_average / ADC_OVERSAMPLES;
-                if (adc_average > MIN_CHARGING_CURRENT)
+                //adc_result = adc_average / ADC_OVERSAMPLES;
+                //if (adc_average > MIN_CHARGING_CURRENT)
                 {
                     adc_average = 0;
                     for (i = 0; i < ADC_OVERSAMPLES; i++)
@@ -162,10 +170,14 @@ void main(void)
 
                     //Averages the read ADC samples
                     adc_result = adc_average / ADC_OVERSAMPLES;
-                    if (adc_average > CHARGED_BATT_VOLTAGE)
+                    if (adc_average > CHARGED_BATT_VOLTAGE_LEVEL)
                     {
                         eeprom_write("F001h", 0);               //writes a 1 into EEPROM
                         state = STATE_ON;
+
+                        //Testing:
+                        PORTC &= ~LEDR_PIN;
+                        PORTC |= LEDG_PIN;
                     }
                 }
                 break;
