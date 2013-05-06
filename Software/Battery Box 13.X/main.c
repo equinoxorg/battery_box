@@ -44,6 +44,7 @@
 #include <stdint.h>
 
 
+
 // PIC16F1824 Configuration Bit Settings - Int Osc at 4Mhz, Watchdog off
 __CONFIG(FOSC_INTOSC & WDTE_OFF & PWRTE_OFF & MCLRE_ON & CP_OFF & CPD_OFF & BOREN_ON & CLKOUTEN_OFF & IESO_ON & FCMEN_ON);
 __CONFIG(WRT_OFF & PLLEN_ON & STVREN_ON & BORV_LO & LVP_ON);
@@ -54,9 +55,9 @@ __CONFIG(WRT_OFF & PLLEN_ON & STVREN_ON & BORV_LO & LVP_ON);
 #endif
 
 //Port C Output Ports
-#define LEDG_PIN	(1 << 4)
+#define LVCO_PIN	(1 << 4)            //This was the LEDG pin. They've been switched - temporarily
 #define LEDR_PIN	(1 << 5)
-#define LVCO_PIN	(1 << 3)
+#define LEDG_PIN	(1 << 3)            //Switch this on to switch the circuit on. Counter intuitive, I know
 
 //Analogue input pins
 #define BATT_V	2
@@ -73,8 +74,8 @@ __CONFIG(WRT_OFF & PLLEN_ON & STVREN_ON & BORV_LO & LVP_ON);
 //#define LOW_BATT_LEVEL	0xC4
 #define LOW_BATT_VOLTAGE        ( (FULL_BATT_VOLTAGE-CUTOFF_VOLTAGE)*LOW_BATT_PERCENTAGE + CUTOFF_VOLTAGE )
 #define LOW_BATT_LEVEL          ( (uint8_t) ( (LOW_BATT_VOLTAGE/(float)3) / (( VCC_5V_SUPPLY /(float)255) ) ))
-//#define CUTOUT_LEVEL	0xB4
-#define CUTOUT_LEVEL            ( (uint8_t) ( (CUTOFF_VOLTAGE/(float)3)/( VCC_5V_SUPPLY / (float)255) ) )
+#define CUTOUT_LEVEL            0x02EE
+//#define CUTOUT_LEVEL            ( (uint8_t) ( (CUTOFF_VOLTAGE/(float)3)/( VCC_5V_SUPPLY / (float)255) ) )
 #define CHARGED_BATT_VOLTAGE_LEVEL    ( (uint8_t) ( (CUTOFF_VOLTAGE/(float)3)/( VCC_5V_SUPPLY / (float)255) ) )
 
 //State Machine States
@@ -136,6 +137,7 @@ void main(void)
         {
             case STATE_ON:
                 //Read the ADC and oversamples to improve accuracy
+                PORTC |= LEDG_PIN;
                 adc_average = 0;
                 for (i = 0; i < ADC_OVERSAMPLES; i++)
                     adc_average += read_ADC(BATT_V);
@@ -149,7 +151,7 @@ void main(void)
 
                     //Testing:
                     PORTC &= ~LEDG_PIN;
-                    PORTC |= LEDR_PIN;
+                    //PORTC |= LEDR_PIN;
                 }
                 break;
 
@@ -170,13 +172,13 @@ void main(void)
 
                     //Averages the read ADC samples
                     adc_result = adc_average / ADC_OVERSAMPLES;
-                    if (adc_average > CHARGED_BATT_VOLTAGE_LEVEL)
+                    if (adc_result > CHARGED_BATT_VOLTAGE_LEVEL)
                     {
                         eeprom_write("F001h", 0);               //writes a 1 into EEPROM
                         state = STATE_ON;
 
                         //Testing:
-                        PORTC &= ~LEDR_PIN;
+                        //PORTC &= ~LEDR_PIN;
                         PORTC |= LEDG_PIN;
                     }
                 }
@@ -207,12 +209,15 @@ void init_hardware(void) {
     ANSELC |= 1 << 1;
 
     //Set up the chip for interrupts
-    ei();                   //enable global interrupts (test to see if this is needed
-    INTCON = 0b10001000;    //enable global interrupt (check if this bit is needed), and enable interrupt-on-change
-
-    IOCAP |= 1 << 6;        //enable interrupt-on-change for pin 5 in bank A
-
-
+    //IOCAP |= 1 << 6;        //enable interrupt-on-change for pin 5 in bank A
+    //IOCAN = 0x0;
+    //INTCON = 0b10001000;    //enable global interrupt (check if this bit is needed), and enable interrupt-on-change
+    //ei();                   //enable global interrupts (test to see if this is needed
+    
+    //IOCAP5 = 1;          //Enabled RA4 Interrupt-On-Change
+    //IOCAN5 = 0;
+    //IOCIE = 1;
+    //GIE = 1;            //Enables Global Interrupts
 }
 
 uint16_t read_ADC(unsigned char adc_channel)
@@ -243,11 +248,20 @@ uint16_t read_ADC(unsigned char adc_channel)
 
 void interrupt ISR (void)
 {
+    PORTC &= ~LEDG_PIN;
+    PORTC |= LEDR_PIN;
+    PORTC |= LVCO_PIN;
+
     if (IOCAF & 0b00100000 !=  0)
     {
         if (state != STATE_SLEEP)
         {
-            PORTC = 0x0;      //Turn off output Pins
+            //PORTC = 0x0;      //Turn off output Pins
+
+            //Testing:
+            PORTC &= ~LEDG_PIN;
+            PORTC |= LEDR_PIN;
+
             SLEEP();          //Sleep
         }
         IOCAF = 0x0;
