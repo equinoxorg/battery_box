@@ -8545,14 +8545,14 @@ W = angled&lt;p&gt;
 <part name="Q2" library="transistor-small-signal" deviceset="BSS123" device=""/>
 <part name="R6" library="rcl" deviceset="R-EU_" device="R0805" value="1k"/>
 <part name="C4" library="rcl" deviceset="C-EU" device="C0805" value="22u"/>
-<part name="R11" library="rcl" deviceset="R-EU_" device="R2512" value="0.005"/>
+<part name="R11" library="rcl" deviceset="R-EU_" device="R2512" value="0.1"/>
 <part name="IC1" library="analog-devices" deviceset="AD826" device="R"/>
 <part name="R12" library="rcl" deviceset="R-EU_" device="R0805" value="100k"/>
 <part name="R13" library="rcl" deviceset="R-EU_" device="R0805" value="100k"/>
 <part name="R14" library="rcl" deviceset="R-EU_" device="R0805" value="66k"/>
 <part name="R15" library="rcl" deviceset="R-EU_" device="R0805" value="66k"/>
-<part name="R16" library="rcl" deviceset="R-EU_" device="R0805" value="1k"/>
-<part name="R17" library="rcl" deviceset="R-EU_" device="R0805" value="1k"/>
+<part name="R16" library="rcl" deviceset="R-EU_" device="R0805" value="20k"/>
+<part name="R17" library="rcl" deviceset="R-EU_" device="R0805" value="20k"/>
 <part name="R18" library="rcl" deviceset="R-EU_" device="R0805" value="1M"/>
 <part name="R19" library="rcl" deviceset="R-EU_" device="R0805" value="10k"/>
 <part name="DATA_OUT" library="con-lstb" deviceset="MA04-1" device=""/>
@@ -8563,6 +8563,8 @@ W = angled&lt;p&gt;
 <plain>
 <text x="20.32" y="167.64" size="1.778" layer="98" rot="R270">Molex connector to crimped battery</text>
 <text x="190.5" y="7.62" size="1.778" layer="98">PCB Mounts</text>
+<text x="353.06" y="111.76" size="1.778" layer="98" rot="R90">Farnell: 1865265</text>
+<text x="45.72" y="142.24" size="1.778" layer="98" rot="R90">Add Reverse Battery Protection Diode:</text>
 </plain>
 <instances>
 <instance part="GND1" gate="1" x="134.62" y="43.18"/>
