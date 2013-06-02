@@ -22,7 +22,7 @@
  |
  |                   __________
  |	VCC         |1      14| GND
- |(RA5) POW         |2      13| PGD     (Programming Pin)
+ |(RA5) POW_SW      |2      13| PGD     (Programming Pin)
  |                  |3      12| PGC     (Programming Pin)
  |      ~MCLR       |4      11| BATT_V (Stepdown to 0-5V)   (RA2/AN2)
  |(RC5)	RX          |5      10| I_SENSE                     (RC0/AN4)
@@ -55,14 +55,15 @@ __CONFIG(WRT_OFF & PLLEN_ON & STVREN_ON & BORV_LO & LVP_ON);
 #endif
 
 //Port C Output Ports
-#define LVCO_PIN	(1 << 4)            //This was the LEDG pin. They've been switched - temporarily
-#define LEDR_PIN	(1 << 5)
-#define LEDG_PIN	(1 << 1)
+#define LVCO_PIN	(1 << 3)    //RC3
+#define LEDR_PIN	(1 << 1)    //RC1
+#define LEDG_PIN	(1 << 2)    //RC2
 #define OP_PIN          (1 << 2)            //Switch this on to switch the circuit on. Counter intuitive, I know
 #define I_SENSE_PIN     (1 << 1)
 
 //Analogue input pins
 #define BATT_V	2
+#define CURR_V 4
 #define I_SENSE_INPUT   4       //or should this be 0?
 
 #define FULL_BATT_VOLTAGE       ((float) 14.0)
@@ -100,6 +101,7 @@ void main(void)
 {
     uint16_t adc_average;
     uint16_t adc_result, i;
+    uint16_t current;
 
     init_hardware();
 
@@ -193,6 +195,7 @@ void main(void)
         //Waits a set time before reading the ADC again
         __delay_ms(POLL_INTERVAL_MS);
     }
+
 }
 
 void init_hardware(void) {
@@ -201,10 +204,11 @@ void init_hardware(void) {
     //OPTION = 0b11000000;
 
     //set all output ports to zero
-    //TRISC = ~(LVCO_PIN | LEDG_PIN | LEDR_PIN);
+    TRISC = ~(LVCO_PIN | LEDG_PIN | LEDR_PIN);
     TRISC = ~OP_PIN;
 
     //Turn on green LED
+    PORTC |= (LEDG_PIN | LEDR_PIN);
     //PORTC &= ~(LEDG_PIN | LVCO_PIN);
     //PORTC |= LEDR_PIN;
 
@@ -216,15 +220,15 @@ void init_hardware(void) {
     ANSELC |= 1 << 1;
 
     //Set up the chip for interrupts
-    //IOCAP |= 1 << 6;        //enable interrupt-on-change for pin 5 in bank A
-    //IOCAN = 0x0;
-    //INTCON = 0b10001000;    //enable global interrupt (check if this bit is needed), and enable interrupt-on-change
-    //ei();                   //enable global interrupts (test to see if this is needed
+    IOCAP |= 1 << 5;        //enable interrupt-on-change for RA5
+    IOCAN = 0x0;
+    INTCON = 0b10001000;    //enable global interrupt (check if this bit is needed), and enable interrupt-on-change
+    ei();                   //enable global interrupts (test to see if this is needed
     
-    //IOCAP5 = 1;          //Enabled RA4 Interrupt-On-Change
-    //IOCAN5 = 0;
-    //IOCIE = 1;
-    //GIE = 1;            //Enables Global Interrupts
+    IOCAP5 = 1;          //Enabled RA5 Interrupt-On-Change
+    IOCAN5 = 0;
+    IOCIE = 1;
+    GIE = 1;            //Enables Global Interrupts
 }
 
 uint16_t read_ADC(unsigned char adc_channel)
@@ -259,7 +263,7 @@ void interrupt ISR (void)
     PORTC |= LEDR_PIN;
     PORTC |= LVCO_PIN;
 
-    if (IOCAF & 0b00100000 !=  0)
+    if (IOCAF & (1 << 5))
     {
         if (state != STATE_SLEEP)
         {
@@ -271,6 +275,7 @@ void interrupt ISR (void)
 
             SLEEP();          //Sleep
         }
-        IOCAF = 0x0;
     }
+
+    IOCAF = 0x0;
 }
