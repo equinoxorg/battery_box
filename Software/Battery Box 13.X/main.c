@@ -124,7 +124,7 @@ void main(void)
 //            __delay_ms(100);
 //        }
 //    }
-    eeprom_readdata = eeprom_read("F001h");
+    eeprom_readdata = eeprom_read(0xF001);
     if (eeprom_readdata == 1)
     {
         state = STATE_OFF;
@@ -149,7 +149,7 @@ void main(void)
                 adc_result = adc_average / ADC_OVERSAMPLES;
                 if (adc_result < CUTOUT_LEVEL)
                 {
-                    eeprom_write("F001h", 1);               //writes a 1 into EEPROM
+                    eeprom_write(0xF001, 1);               //writes a 1 into EEPROM
                     state = STATE_OFF;
 
                     //Turn off Green LED here and Turn on Red LED
@@ -180,7 +180,7 @@ void main(void)
                     adc_result = adc_average / ADC_OVERSAMPLES;
                     if (adc_result > CUTOUT_LEVEL)
                     {
-                        eeprom_write("F001h", 0);               //writes a 1 into EEPROM
+                        eeprom_write(0xF001, 0);               //writes a 1 into EEPROM
                         state = STATE_ON;
 
                         //Testing:
