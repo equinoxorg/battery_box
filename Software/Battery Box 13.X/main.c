@@ -26,8 +26,8 @@
  |                  |3      12| PGC     (Programming Pin)
  |      ~MCLR       |4      11| BATT_V (Stepdown to 0-5V)   (RA2/AN2)
  |(RC5)	RX          |5      10| I_SENSE                     (RC0/AN4)
- |(RC4)	TX          |6       9| 
- |                  |7       8| 
+ |(RC4)	TX          |6       9| RED LED     RC1
+ |                  |7       8| GREEN LED   RC2
  |                  -----------
  | 	I_SENSE is the charging current
  |	BATT_V is the battery voltage, steoped down to 1/3 of its normal value
@@ -57,8 +57,8 @@ __CONFIG(WRT_OFF & PLLEN_ON & STVREN_ON & BORV_LO & LVP_ON);
 //Port C Output Ports
 #define LVCO_PIN	(1 << 4)            //This was the LEDG pin. They've been switched - temporarily
 #define LEDR_PIN	(1 << 5)
-#define LEDG_PIN	
-#define OP_PIN          (1 << 3)            //Switch this on to switch the circuit on. Counter intuitive, I know
+#define LEDG_PIN	(1 << 1)
+#define OP_PIN          (1 << 2)            //Switch this on to switch the circuit on. Counter intuitive, I know
 #define I_SENSE_PIN     (1 << 1)
 
 //Analogue input pins
