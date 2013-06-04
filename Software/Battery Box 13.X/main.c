@@ -27,7 +27,7 @@
  |      ~MCLR       |4      11| BATT_V (Stepdown to 0-5V)   (RA2/AN2)
  |(RC5)	RX          |5      10| I_SENSE                     (RC0/AN4)
  |(RC4)	TX          |6       9| RED LED     RC1
- |                  |7       8| GREEN LED   RC2
+ |(RC3) LVCO        |7       8| GREEN LED   RC2
  |                  -----------
  | 	I_SENSE is the charging current
  |	BATT_V is the battery voltage, steoped down to 1/3 of its normal value
@@ -58,7 +58,6 @@ __CONFIG(WRT_OFF & PLLEN_ON & STVREN_ON & BORV_LO & LVP_ON);
 #define LVCO_PIN	(1 << 3)    //RC3
 #define LEDR_PIN	(1 << 1)    //RC1
 #define LEDG_PIN	(1 << 2)    //RC2
-#define OP_PIN          (1 << 2)            //Switch this on to switch the circuit on. Counter intuitive, I know
 #define I_SENSE_PIN     (1 << 1)
 
 //Analogue input pins
@@ -66,20 +65,18 @@ __CONFIG(WRT_OFF & PLLEN_ON & STVREN_ON & BORV_LO & LVP_ON);
 #define CURR_V 4
 #define I_SENSE_INPUT   4       //or should this be 0?
 
-#define FULL_BATT_VOLTAGE       ((float) 14.0)
-#define CHARGED_BATT_VOLTAGE    ((float) 13.0)
-#define CUTOFF_VOLTAGE          ((float) 10.9)
-#define VCC_5V_SUPPLY           ((float) 5.15)
-#define LOW_BATT_PERCENTAGE     ((float) 0.25)
+#define FULL_BATT_VOLTAGE       14.0f
+#define CHARGED_BATT_VOLTAGE    13.0f
+#define CUTOFF_VOLTAGE          10.9f
+#define VCC_VOLTAGE             5.0f
+#define LOW_BATT_PERCENTAGE     0.25f
 #define MIN_CHARGING_CURRENT    ((uint8_t) 100)
 
 //Converts the above levels to ADC values - [DONT EDIT]
-//#define LOW_BATT_LEVEL	0xC4
 #define LOW_BATT_VOLTAGE        ( (FULL_BATT_VOLTAGE-CUTOFF_VOLTAGE)*LOW_BATT_PERCENTAGE + CUTOFF_VOLTAGE )
-#define LOW_BATT_LEVEL          ( (uint8_t) ( (LOW_BATT_VOLTAGE/(float)3) / (( VCC_5V_SUPPLY /(float)255) ) ))
-#define CUTOUT_LEVEL            0x02D0
-//#define CUTOUT_LEVEL            ( (uint8_t) ( (CUTOFF_VOLTAGE/(float)3)/( VCC_5V_SUPPLY / (float)255) ) )
-#define CHARGED_BATT_VOLTAGE_LEVEL    ( (uint8_t) ( (CUTOFF_VOLTAGE/(float)3)/( VCC_5V_SUPPLY / (float)255) ) )
+#define LOW_BATT_LEVEL          ( (uint16_t) ( (LOW_BATT_VOLTAGE/3.0f) / (( VCC_VOLTAGE /(float)0x3FF) ) ))
+#define CUTOUT_LEVEL            ( (uint16_t) ( (CUTOFF_VOLTAGE/3.0f)/( VCC_VOLTAGE / (float)0x3FF) ) )
+#define CHARGED_BATT_VOLTAGE_LEVEL    ( (uint16_t) ( (CHARGED_BATT_VOLTAGE/3.0f)/( VCC_VOLTAGE / (float)0x3FF) ) )
 
 //State Machine States
 #define STATE_ON 0
@@ -92,7 +89,7 @@ __CONFIG(WRT_OFF & PLLEN_ON & STVREN_ON & BORV_LO & LVP_ON);
 
 //Global Variable
 char state;
-char eeprom_readdata;
+
 //Function definitions
 void init_hardware();
 uint16_t read_ADC(char);
@@ -100,7 +97,8 @@ uint16_t read_ADC(char);
 void main(void)
 {
     uint16_t adc_average;
-    uint16_t adc_result, i;
+    uint16_t adc_result;
+    int i;
     uint16_t current;
 
     init_hardware();
@@ -126,11 +124,9 @@ void main(void)
 //            __delay_ms(100);
 //        }
 //    }
-    eeprom_readdata = eeprom_read(0xF001);
-    if (eeprom_readdata == 1)
-    {
+
+    if (eeprom_read(0xF001))
         state = STATE_OFF;
-    }
     else 
         state = STATE_ON;
 
@@ -140,9 +136,13 @@ void main(void)
         switch (state)
         {
             case STATE_ON:
+                //Ensure the outputs are on
+                PORTC |= LVCO_PIN;
+
+                //Turn on Green LED
+                PORTC |= LEDG_PIN;
+
                 //Read the ADC and oversamples to improve accuracy
-                PORTC |= OP_PIN;
-                //Turn on Green LED here
                 adc_average = 0;
                 for (i = 0; i < ADC_OVERSAMPLES; i++)
                     adc_average += read_ADC(BATT_V);
@@ -151,45 +151,67 @@ void main(void)
                 adc_result = adc_average / ADC_OVERSAMPLES;
                 if (adc_result < CUTOUT_LEVEL)
                 {
-                    eeprom_write(0xF001, 1);               //writes a 1 into EEPROM
+                    //writes a 1 into EEPROM
+                    eeprom_write(0xF001, 1);
+
+                    //Turn the state to OFF
                     state = STATE_OFF;
 
                     //Turn off Green LED here and Turn on Red LED
+                    PORTC &= ~LEDG_PIN;
+                    PORTC |= LEDR_PIN;
 
-                    //Testing:
-                    //PORTC &= ~(OP_PIN && ~I_SENSE_PIN);
-                    PORTC &= ~OP_PIN;
-                    //PORTC |= LEDR_PIN;
+                    //Turn off output
+                    PORTC &= ~LVCO_PIN;
+                }
+                else if  (adc_result < LOW_BATT_LEVEL)
+                {
+                    //Turn on Grean and Red Led for orange
+                    PORTC |= (LEDG_PIN | LEDR_PIN);
                 }
                 break;
 
             case STATE_OFF:
+                //Turn off outputs
+                PORTC &= ~LVCO_PIN;
+
+                //Turn on Red LED
+                PORTC |= LEDR_PIN;
+                //Turn off Green LED
+                PORTC &= ~LEDG_PIN;
+
                 //read ISENSE code here
                 //Read the ADC and oversamples to improve accuracy
                 adc_average = 0;
-                //for (i = 0; i < ADC_OVERSAMPLES; i++)
-                   // adc_average += read_ADC(I_SENSE_INPUT);
+                for (i = 0; i < ADC_OVERSAMPLES; i++)
+                    adc_average += read_ADC(I_SENSE_INPUT);
 
                 //Averages the read ADC samples
-                //adc_result = adc_average / ADC_OVERSAMPLES;
-                //if (adc_average > MIN_CHARGING_CURRENT)
-                {
+                adc_result = adc_average / ADC_OVERSAMPLES;
+               // if (adc_average > MIN_CHARGING_CURRENT)
+               // {
                     adc_average = 0;
                     for (i = 0; i < ADC_OVERSAMPLES; i++)
                         adc_average += read_ADC(BATT_V);
 
                     //Averages the read ADC samples
                     adc_result = adc_average / ADC_OVERSAMPLES;
-                    if (adc_result > CUTOUT_LEVEL)
+                    if (adc_result > CHARGED_BATT_VOLTAGE_LEVEL)
                     {
-                        eeprom_write(0xF001, 0);               //writes a 1 into EEPROM
+                        //writes a 1 into EEPROM
+                        eeprom_write(0xF001, 0);
                         state = STATE_ON;
 
-                        //Testing:
-                        //PORTC &= ~LEDR_PIN;
-                        PORTC |= OP_PIN;
+                        //Turn off Red LED
+                        PORTC &= ~LEDR_PIN;
+
+                        //Turn on the Green LED
+                        PORTC |= LEDG_PIN;
+
+                        //Turn on the LVCO Pin
+                        PORTC |= LVCO_PIN;
                     }
-                }
+               // }
                 break;
         }
         //Waits a set time before reading the ADC again
@@ -198,20 +220,18 @@ void main(void)
 
 }
 
-void init_hardware(void) {
-
-    //Allows the RC5 pin to be used as a GPIO pin
-    //OPTION = 0b11000000;
-
-    //set all output ports to zero
-    TRISC = ~(LVCO_PIN | LEDG_PIN | LEDR_PIN);
-    TRISC = ~OP_PIN;
+void init_hardware(void)
+{
+    //setup all output ports by clearing bits
+    TRISC &= ~(LVCO_PIN | LEDG_PIN | LEDR_PIN);
 
     //Turn on green LED
-    PORTC |= (LEDG_PIN | LEDR_PIN);
-    //PORTC &= ~(LEDG_PIN | LVCO_PIN);
-    //PORTC |= LEDR_PIN;
-
+    PORTC |= (LEDG_PIN);
+    //Turn off red LED
+    PORTC &= ~(LEDR_PIN);
+    //Turn off output pin
+    PORTC &= ~(LVCO_PIN);
+    
     //Set up adc
     ADCON1 = 0b10100000;
 
@@ -253,7 +273,7 @@ uint16_t read_ADC(unsigned char adc_channel)
     ADCON0 = 0b11000000;
 
     //Return the 10 bit results made into a 16 bit int
-    return ( (uint16_t)ADRESH << 8) | ADRESL ;
+    return ( ((uint16_t)ADRESH) << 8) | ADRESL ;
     
 }
 
@@ -267,8 +287,6 @@ void interrupt ISR (void)
     {
         if (state != STATE_SLEEP)
         {
-            //PORTC = 0x0;      //Turn off output Pins
-
             //Testing:
             PORTC &= ~LEDG_PIN;
             PORTC |= LEDR_PIN;
