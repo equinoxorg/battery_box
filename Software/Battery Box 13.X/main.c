@@ -124,7 +124,7 @@ void main(void)
 //            __delay_ms(100);
 //        }
 //    }
-
+//    SLEEP();
     if (eeprom_read(0xF001))
         state = STATE_OFF;
     else 
@@ -135,6 +135,10 @@ void main(void)
         //Processes the ADC value and switches outputs accordingly
         switch (state)
         {
+            case STATE_SLEEP:
+                SLEEP();
+                break;
+                
             case STATE_ON:
                 //Ensure the outputs are on
                 PORTC |= LVCO_PIN;
@@ -279,21 +283,37 @@ uint16_t read_ADC(unsigned char adc_channel)
 
 void interrupt ISR (void)
 {
-    PORTC &= ~LEDG_PIN;
-    PORTC |= LEDR_PIN;
-    PORTC |= LVCO_PIN;
 
     if (IOCAF & (1 << 5))
     {
         if (state != STATE_SLEEP)
         {
             //Testing:
-            PORTC &= ~LEDG_PIN;
-            PORTC |= LEDR_PIN;
+            PORTC |= (LEDR_PIN);
+            __delay_ms(100);
+            PORTC &= ~(LEDR_PIN);
+            __delay_ms(100);
+            PORTC |= (LEDR_PIN);
+            __delay_ms(100);
+            PORTC &= ~(LEDR_PIN);
+            __delay_ms(100);
 
-            SLEEP();          //Sleep
+
+            state = STATE_SLEEP;          //Sleep
+        }
+        else
+        {
+            PORTC |= (LEDG_PIN);
+            __delay_ms(100);
+            PORTC &= ~(LEDG_PIN);
+            __delay_ms(100);
+            PORTC |= (LEDG_PIN);
+            __delay_ms(100);
+            PORTC &= ~(LEDG_PIN);
+            __delay_ms(100);
+
+            state = STATE_OFF;
         }
     }
-
     IOCAF = 0x0;
 }
