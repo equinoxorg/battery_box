@@ -103,31 +103,11 @@ void main(void)
     init_hardware();
 
     __delay_ms(500);
-    //EEPROM Test Code
-//    while (1)
-//    {
-//        eeprom_write("F001h", 0);
-//        eeprom_readdata = eeprom_read("F001h");
-//        if (eeprom_readdata == 1)
-//        {
-//            PORTC |= (LEDR_PIN | LEDG_PIN | LVCO_PIN);
-//            __delay_ms(100);
-//            PORTC &= ~(LEDR_PIN | LEDG_PIN | LVCO_PIN);
-//            __delay_ms(100);
-//        }
-//        else
-//        {
-//            PORTC |= (LEDR_PIN);
-//            __delay_ms(100);
-//            PORTC &= ~(LEDR_PIN);
-//            __delay_ms(100);
-//        }
-//    }
-//    SLEEP();
-    if (eeprom_read(0xF001) != 1)
-        state = STATE_ON;
-    else
+    
+    if (eeprom_read(0xF001))
         state = STATE_OFF;
+    else
+        state = STATE_ON;
 
     while (1)
     {
@@ -142,7 +122,7 @@ void main(void)
                 //Ensure the outputs are on
 
                 //Turn on Green LED
-                PORTC |= (LEDG_PIN|LVCO_PIN);
+                PORTC |= (LEDG_PIN | LVCO_PIN);
 
                 //Read the ADC and oversamples to improve accuracy
                 adc_average = 0;
