@@ -1,6 +1,5 @@
-
 /*--------------------------- Low Voltage Cut Off ------------------------------
- | 	E.quinox battery box low voltage cutout circuit
+ |  E.quinox battery box low voltage cutout circuit
  |  Copyright (C) 2013  Ashley Grealish & Yuchen Wang - www.e.quinox.org
  |
  |  This program is free software: you can redistribute it and/or modify
@@ -104,30 +103,10 @@ void main(void)
     init_hardware();
 
     __delay_ms(500);
-    //EEPROM Test Code
-//    while (1)
-//    {
-//        eeprom_write("F001h", 0);
-//        eeprom_readdata = eeprom_read("F001h");
-//        if (eeprom_readdata == 1)
-//        {
-//            PORTC |= (LEDR_PIN | LEDG_PIN | LVCO_PIN);
-//            __delay_ms(100);
-//            PORTC &= ~(LEDR_PIN | LEDG_PIN | LVCO_PIN);
-//            __delay_ms(100);
-//        }
-//        else
-//        {
-//            PORTC |= (LEDR_PIN);
-//            __delay_ms(100);
-//            PORTC &= ~(LEDR_PIN);
-//            __delay_ms(100);
-//        }
-//    }
-//    SLEEP();
+    
     if (eeprom_read(0xF001))
         state = STATE_OFF;
-    else 
+    else
         state = STATE_ON;
 
     while (1)
@@ -138,13 +117,12 @@ void main(void)
             case STATE_SLEEP:
                 SLEEP();
                 break;
-                
+
             case STATE_ON:
                 //Ensure the outputs are on
-                PORTC |= LVCO_PIN;
 
                 //Turn on Green LED
-                PORTC |= LEDG_PIN;
+                PORTC |= (LEDG_PIN | LVCO_PIN);
 
                 //Read the ADC and oversamples to improve accuracy
                 adc_average = 0;
@@ -168,7 +146,7 @@ void main(void)
                     //Turn off output
                     PORTC &= ~LVCO_PIN;
                 }
-                else if  (adc_result < LOW_BATT_LEVEL)
+                else if  (adc_result < LOW_BATT_LEVEL)                          //NOTE: LOW VOLTAGE FLICKER OCCURS IF THIS LOOP IS EXECUTED
                 {
                     //Turn on Grean and Red Led for orange
                     PORTC |= (LEDG_PIN | LEDR_PIN);
@@ -209,11 +187,8 @@ void main(void)
                         //Turn off Red LED
                         PORTC &= ~LEDR_PIN;
 
-                        //Turn on the Green LED
-                        PORTC |= LEDG_PIN;
-
-                        //Turn on the LVCO Pin
-                        PORTC |= LVCO_PIN;
+                        //Turn on 
+                        PORTC |= (LEDG_PIN|LVCO_PIN);
                     }
                // }
                 break;
@@ -235,7 +210,7 @@ void init_hardware(void)
     PORTC &= ~(LEDR_PIN);
     //Turn off output pin
     PORTC &= ~(LVCO_PIN);
-    
+
     //Set up adc
     ADCON1 = 0b10100000;
 
@@ -248,11 +223,11 @@ void init_hardware(void)
     IOCAN = 0x0;
     INTCON = 0b10001000;    //enable global interrupt (check if this bit is needed), and enable interrupt-on-change
     ei();                   //enable global interrupts (test to see if this is needed
-    
-    IOCAP5 = 1;          //Enabled RA5 Interrupt-On-Change
-    IOCAN5 = 0;
-    IOCIE = 1;
-    GIE = 1;            //Enables Global Interrupts
+//
+//    IOCAP5 = 1;          //Enabled RA5 Interrupt-On-Change
+//    IOCAN5 = 0;
+//    IOCIE = 1;
+//    GIE = 1;            //Enables Global Interrupts
 }
 
 uint16_t read_ADC(unsigned char adc_channel)
@@ -278,7 +253,7 @@ uint16_t read_ADC(unsigned char adc_channel)
 
     //Return the 10 bit results made into a 16 bit int
     return ( ((uint16_t)ADRESH) << 8) | ADRESL ;
-    
+
 }
 
 void interrupt ISR (void)
@@ -294,10 +269,6 @@ void interrupt ISR (void)
             PORTC &= ~(LEDR_PIN);
             __delay_ms(100);
             PORTC |= (LEDR_PIN);
-            __delay_ms(100);
-            PORTC &= ~(LEDR_PIN);
-            __delay_ms(100);
-
 
             state = STATE_SLEEP;          //Sleep
         }
@@ -307,13 +278,14 @@ void interrupt ISR (void)
             __delay_ms(100);
             PORTC &= ~(LEDG_PIN);
             __delay_ms(100);
-            PORTC |= (LEDG_PIN);
-            __delay_ms(100);
-            PORTC &= ~(LEDG_PIN);
-            __delay_ms(100);
 
-            state = STATE_OFF;
+
+            if (eeprom_read(0xF001))
+                state = STATE_OFF;
+            else
+                state = STATE_ON;
         }
     }
+
     IOCAF = 0x0;
 }
