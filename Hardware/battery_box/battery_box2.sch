@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE eagle SYSTEM "eagle.dtd">
-<eagle version="6.4">
+<eagle version="6.3">
 <drawing>
 <settings>
 <setting alwaysvectorfont="no"/>
@@ -8662,7 +8662,6 @@ Source: http://www.st.com/stonline/products/literature/ds/7194/ld1117axx.pdf</de
 <part name="R7" library="rcl" deviceset="R-EU_" device="R0805" value="1k"/>
 <part name="SW_POW" library="SparkFun" deviceset="TAC_SWITCH" device="PTH"/>
 <part name="U$2" library="equinox" deviceset="PTC" device=""/>
-<part name="R8" library="rcl" deviceset="R-EU_" device="R0805" value="500"/>
 <part name="IC3" library="equinox" deviceset="PIC16F1824" device=""/>
 <part name="R9" library="rcl" deviceset="R-EU_" device="R0805" value="20k"/>
 <part name="R10" library="rcl" deviceset="R-EU_" device="R0805" value="10k"/>
@@ -8700,7 +8699,6 @@ Source: http://www.st.com/stonline/products/literature/ds/7194/ld1117axx.pdf</de
 <text x="20.32" y="167.64" size="1.778" layer="98" rot="R270">Molex connector to crimped battery</text>
 <text x="190.5" y="7.62" size="1.778" layer="98">PCB Mounts</text>
 <text x="353.06" y="111.76" size="1.778" layer="98" rot="R90">Farnell: 1865265</text>
-<text x="45.72" y="142.24" size="1.778" layer="98" rot="R90">Add Reverse Battery Protection Diode:</text>
 </plain>
 <instances>
 <instance part="GND1" gate="1" x="134.62" y="43.18"/>
@@ -8724,7 +8722,6 @@ Source: http://www.st.com/stonline/products/literature/ds/7194/ld1117axx.pdf</de
 <instance part="R7" gate="G$1" x="129.54" y="76.2" rot="R90"/>
 <instance part="SW_POW" gate="S" x="81.28" y="86.36" rot="R270"/>
 <instance part="U$2" gate="G$1" x="25.4" y="167.64" rot="R90"/>
-<instance part="R8" gate="G$1" x="40.64" y="134.62" rot="R90"/>
 <instance part="IC3" gate="G$1" x="106.68" y="124.46"/>
 <instance part="R9" gate="G$1" x="68.58" y="154.94" rot="R90"/>
 <instance part="R10" gate="G$1" x="68.58" y="96.52" rot="R90"/>
@@ -8877,7 +8874,7 @@ Source: http://www.st.com/stonline/products/literature/ds/7194/ld1117axx.pdf</de
 </net>
 <net name="V_BATT" class="1">
 <segment>
-<wire x1="40.64" y1="182.88" x2="40.64" y2="139.7" width="0.1524" layer="91"/>
+<wire x1="40.64" y1="182.88" x2="40.64" y2="119.38" width="0.1524" layer="91"/>
 <label x="30.48" y="182.88" size="1.778" layer="95"/>
 <wire x1="25.4" y1="182.88" x2="33.02" y2="182.88" width="0.1524" layer="91"/>
 <wire x1="33.02" y1="182.88" x2="40.64" y2="182.88" width="0.1524" layer="91"/>
@@ -8887,7 +8884,6 @@ Source: http://www.st.com/stonline/products/literature/ds/7194/ld1117axx.pdf</de
 <wire x1="160.02" y1="182.88" x2="68.58" y2="182.88" width="0.1524" layer="91"/>
 <wire x1="68.58" y1="182.88" x2="40.64" y2="182.88" width="0.1524" layer="91"/>
 <wire x1="25.4" y1="175.26" x2="25.4" y2="182.88" width="0.1524" layer="91"/>
-<pinref part="R8" gate="G$1" pin="2"/>
 <pinref part="R9" gate="G$1" pin="2"/>
 <wire x1="68.58" y1="160.02" x2="68.58" y2="182.88" width="0.1524" layer="91"/>
 <junction x="68.58" y="182.88"/>
@@ -8900,6 +8896,12 @@ Source: http://www.st.com/stonline/products/literature/ds/7194/ld1117axx.pdf</de
 <pinref part="D3" gate="1" pin="C"/>
 <wire x1="170.18" y1="193.04" x2="160.02" y2="193.04" width="0.1524" layer="91"/>
 <wire x1="160.02" y1="193.04" x2="160.02" y2="182.88" width="0.1524" layer="91"/>
+<label x="40.64" y="121.92" size="1.778" layer="95" rot="R90"/>
+<pinref part="IC4" gate="G$1" pin="IN"/>
+<wire x1="45.72" y1="119.38" x2="40.64" y2="119.38" width="0.1524" layer="91"/>
+<wire x1="40.64" y1="119.38" x2="40.64" y2="99.06" width="0.1524" layer="91"/>
+<pinref part="C5" gate="G$1" pin="1"/>
+<junction x="40.64" y="119.38"/>
 </segment>
 </net>
 <net name="PGD" class="0">
@@ -9188,7 +9190,7 @@ Source: http://www.st.com/stonline/products/literature/ds/7194/ld1117axx.pdf</de
 <label x="83.82" y="20.32" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="N$1" class="1">
+<net name="12V_OUT" class="1">
 <segment>
 <pinref part="Q1" gate="G$1" pin="D"/>
 <pinref part="12V_OUT_2" gate="G$1" pin="PAD1"/>
@@ -9212,7 +9214,7 @@ Source: http://www.st.com/stonline/products/literature/ds/7194/ld1117axx.pdf</de
 <wire x1="187.96" y1="193.04" x2="175.26" y2="193.04" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="N$20" class="1">
+<net name="GND_OUTPUT" class="1">
 <segment>
 <pinref part="X2" gate="G$1" pin="S2"/>
 <pinref part="X2" gate="G$1" pin="S1"/>
@@ -9276,17 +9278,6 @@ Source: http://www.st.com/stonline/products/literature/ds/7194/ld1117axx.pdf</de
 <wire x1="314.96" y1="144.78" x2="314.96" y2="139.7" width="0.1524" layer="91"/>
 <junction x="314.96" y="144.78"/>
 <junction x="314.96" y="139.7"/>
-</segment>
-</net>
-<net name="N$13" class="0">
-<segment>
-<pinref part="R8" gate="G$1" pin="1"/>
-<wire x1="40.64" y1="129.54" x2="40.64" y2="119.38" width="0.1524" layer="91"/>
-<label x="48.26" y="124.46" size="1.778" layer="95"/>
-<pinref part="IC4" gate="G$1" pin="IN"/>
-<wire x1="45.72" y1="119.38" x2="40.64" y2="119.38" width="0.1524" layer="91"/>
-<wire x1="40.64" y1="119.38" x2="40.64" y2="99.06" width="0.1524" layer="91"/>
-<pinref part="C5" gate="G$1" pin="1"/>
 </segment>
 </net>
 </nets>
