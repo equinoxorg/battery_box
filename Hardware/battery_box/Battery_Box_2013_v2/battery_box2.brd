@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE eagle SYSTEM "eagle.dtd">
-<eagle version="6.3">
+<eagle version="6.4">
 <drawing>
 <settings>
 <setting alwaysvectorfont="no"/>
@@ -33,9 +33,9 @@
 <layer number="23" name="tOrigins" color="15" fill="1" visible="yes" active="yes"/>
 <layer number="24" name="bOrigins" color="15" fill="1" visible="yes" active="yes"/>
 <layer number="25" name="tNames" color="7" fill="1" visible="yes" active="yes"/>
-<layer number="26" name="bNames" color="7" fill="1" visible="no" active="yes"/>
-<layer number="27" name="tValues" color="7" fill="1" visible="no" active="yes"/>
-<layer number="28" name="bValues" color="7" fill="1" visible="no" active="yes"/>
+<layer number="26" name="bNames" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="27" name="tValues" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="28" name="bValues" color="7" fill="1" visible="yes" active="yes"/>
 <layer number="29" name="tStop" color="7" fill="3" visible="no" active="yes"/>
 <layer number="30" name="bStop" color="7" fill="6" visible="no" active="yes"/>
 <layer number="31" name="tCream" color="7" fill="4" visible="no" active="yes"/>
@@ -51,9 +51,9 @@
 <layer number="41" name="tRestrict" color="4" fill="10" visible="no" active="yes"/>
 <layer number="42" name="bRestrict" color="1" fill="10" visible="no" active="yes"/>
 <layer number="43" name="vRestrict" color="2" fill="10" visible="no" active="yes"/>
-<layer number="44" name="Drills" color="7" fill="1" visible="no" active="yes"/>
+<layer number="44" name="Drills" color="7" fill="1" visible="yes" active="yes"/>
 <layer number="45" name="Holes" color="7" fill="1" visible="no" active="yes"/>
-<layer number="46" name="Milling" color="3" fill="1" visible="yes" active="yes"/>
+<layer number="46" name="Milling" color="3" fill="1" visible="no" active="yes"/>
 <layer number="47" name="Measures" color="7" fill="1" visible="no" active="yes"/>
 <layer number="48" name="Document" color="7" fill="1" visible="no" active="yes"/>
 <layer number="49" name="Reference" color="7" fill="1" visible="no" active="yes"/>
@@ -86,9 +86,9 @@
 <layer number="125" name="_tNames" color="7" fill="1" visible="no" active="yes"/>
 <layer number="131" name="prix" color="7" fill="1" visible="no" active="yes"/>
 <layer number="132" name="test" color="7" fill="1" visible="no" active="yes"/>
-<layer number="144" name="Drill_legend" color="7" fill="1" visible="no" active="yes"/>
+<layer number="144" name="Drill_legend" color="7" fill="1" visible="yes" active="yes"/>
 <layer number="151" name="HeatSink" color="7" fill="1" visible="no" active="yes"/>
-<layer number="200" name="200bmp" color="16" fill="1" visible="yes" active="yes"/>
+<layer number="200" name="200bmp" color="16" fill="1" visible="no" active="yes"/>
 <layer number="201" name="201bmp" color="7" fill="1" visible="no" active="yes"/>
 <layer number="202" name="202bmp" color="7" fill="1" visible="no" active="yes"/>
 <layer number="203" name="203bmp" color="7" fill="1" visible="no" active="yes"/>
@@ -129,19 +129,19 @@ Box 2013</text>
 <wire x1="60" y1="2" x2="58" y2="0" width="0" layer="20" curve="-90"/>
 <wire x1="58" y1="80" x2="60" y2="78" width="0" layer="20" curve="-90"/>
 <wire x1="0" y1="77" x2="2" y2="80" width="0" layer="20" curve="-90"/>
-<dimension x1="60" y1="80" x2="60" y2="0" x3="69" y3="40" layer="51"/>
-<dimension x1="0" y1="80" x2="60" y2="80" x3="30" y3="85" layer="51"/>
-<dimension x1="20" y1="20.88" x2="0" y2="21" x3="9.78400625" y3="-15.05870625" layer="51"/>
-<dimension x1="20" y1="20.88" x2="40" y2="20.88" x3="30" y3="-15" layer="51"/>
-<dimension x1="40" y1="20.88" x2="60" y2="21" x3="50.215775" y3="-15.02270625" layer="51"/>
-<dimension x1="6" y1="6" x2="6" y2="0" x3="-5" y3="3" layer="51"/>
-<dimension x1="6" y1="6" x2="0" y2="6" x3="3" y3="-6" layer="51"/>
-<dimension x1="54" y1="6" x2="54" y2="0" x3="66" y3="3" layer="51"/>
-<dimension x1="54" y1="6" x2="60" y2="6" x3="57" y3="-6" layer="51"/>
-<dimension x1="30" y1="67" x2="0" y2="67" x3="15" y3="98" layer="51"/>
-<dimension x1="30" y1="67" x2="30" y2="80" x3="-10" y3="73.5" layer="51"/>
-<dimension x1="30" y1="51" x2="30" y2="80" x3="-21" y3="65.5" layer="51"/>
-<dimension x1="30" y1="33" x2="30" y2="80" x3="-34" y3="56.5" layer="51"/>
+<dimension x1="60" y1="80" x2="60" y2="0" x3="69" y3="40" textsize="3.5" layer="51"/>
+<dimension x1="0" y1="80" x2="60" y2="80" x3="30" y3="85" textsize="3.5" layer="51"/>
+<dimension x1="20" y1="20.88" x2="0" y2="21" x3="9.78400625" y3="-15.05870625" textsize="3.5" layer="51"/>
+<dimension x1="20" y1="20.88" x2="40" y2="20.88" x3="30" y3="-15" textsize="3.5" layer="51"/>
+<dimension x1="40" y1="20.88" x2="60" y2="21" x3="50.215775" y3="-15.02270625" textsize="3.5" layer="51"/>
+<dimension x1="6" y1="6" x2="6" y2="0" x3="-5" y3="3" textsize="3.5" layer="51"/>
+<dimension x1="6" y1="6" x2="0" y2="6" x3="3" y3="-6" textsize="3.5" layer="51"/>
+<dimension x1="54" y1="6" x2="54" y2="0" x3="66" y3="3" textsize="3.5" layer="51"/>
+<dimension x1="54" y1="6" x2="60" y2="6" x3="57" y3="-6" textsize="3.5" layer="51"/>
+<dimension x1="30" y1="67" x2="0" y2="67" x3="15" y3="98" textsize="3.5" layer="51"/>
+<dimension x1="30" y1="67" x2="30" y2="80" x3="-10" y3="73.5" textsize="3.5" layer="51"/>
+<dimension x1="30" y1="51" x2="30" y2="80" x3="-21" y3="65.5" textsize="3.5" layer="51"/>
+<dimension x1="30" y1="33" x2="30" y2="80" x3="-34" y3="56.5" textsize="3.5" layer="51"/>
 <circle x="35.8" y="59.8" radius="0.360553125" width="0.6096" layer="25"/>
 <circle x="47.5" y="29" radius="0.360553125" width="0.6096" layer="25"/>
 <circle x="29.2" y="13.5" radius="0.360553125" width="0.6096" layer="25"/>
@@ -3218,7 +3218,7 @@ design rules under a new name.</description>
 <attribute name="VALUE" x="27.54" y="39.365" size="1.27" layer="27" rot="R90"/>
 </element>
 <element name="R2" library="rcl" package="R0805" value="49.9k" x="28" y="40" smashed="yes" rot="R270">
-<attribute name="NAME" x="26.765" y="42.37" size="1.27" layer="25"/>
+<attribute name="NAME" x="26.765" y="42.37" size="1.27" layer="25" font="vector"/>
 <attribute name="VALUE" x="25.46" y="40.635" size="1.27" layer="27" rot="R270"/>
 </element>
 <element name="R3" library="rcl" package="R0805" value="75k" x="32" y="40" smashed="yes" rot="R90">
@@ -3256,51 +3256,60 @@ design rules under a new name.</description>
 <attribute name="VALUE" x="17.03" y="69.46" size="1.27" layer="27"/>
 </element>
 <element name="IC2" library="equinox" package="SO14W" value="LM2574" x="34" y="8" smashed="yes" rot="R270">
-<attribute name="NAME" x="37.19" y="1.27" size="1.27" layer="25"/>
+<attribute name="NAME" x="37.19" y="1.27" size="1.27" layer="25" font="vector"/>
 <attribute name="VALUE" x="29.19" y="1.46" size="1.27" layer="27"/>
 </element>
-<element name="C2" library="rcl" package="C0805" value="22u" x="44" y="6" rot="R90"/>
-<element name="C3" library="rcl" package="C0805" value="22u" x="24" y="7" rot="R270"/>
+<element name="C2" library="rcl" package="C0805" value="22u" x="44" y="6" smashed="yes" rot="R90">
+<attribute name="NAME" x="42.73" y="4.73" size="1.27" layer="25" font="vector" rot="R90"/>
+<attribute name="VALUE" x="46.54" y="4.73" size="1.27" layer="27" rot="R90"/>
+</element>
+<element name="C3" library="rcl" package="C0805" value="22u" x="24" y="7" smashed="yes" rot="R270">
+<attribute name="NAME" x="25.27" y="8.27" size="1.27" layer="25" font="vector" rot="R270"/>
+<attribute name="VALUE" x="21.46" y="8.27" size="1.27" layer="27" rot="R270"/>
+</element>
 <element name="L1" library="equinox" package="SMD_INDUCTOR" value="INDUCTOR" x="8" y="25" smashed="yes" rot="R90">
-<attribute name="NAME" x="18.11" y="24.46" size="1.27" layer="25" rot="R90"/>
+<attribute name="NAME" x="18.11" y="24.46" size="1.27" layer="25" font="vector" rot="R90"/>
 </element>
 <element name="Q1" library="equinox" package="TO252" value="IRFR5505PBFTO252" x="43" y="51" rot="R90"/>
 <element name="Q2" library="transistor-small-signal" package="SOT23" value="BSS123" x="51" y="45"/>
-<element name="R6" library="rcl" package="R0805" value="1k" x="46" y="44" rot="R180"/>
+<element name="R6" library="rcl" package="R0805" value="1k" x="46" y="44" smashed="yes" rot="R180">
+<attribute name="NAME" x="46.635" y="42.73" size="1.27" layer="25" font="vector" rot="R180"/>
+<attribute name="VALUE" x="46.635" y="46.54" size="1.27" layer="27" rot="R180"/>
+</element>
 <element name="C4" library="rcl" package="C0805" value="22u" x="38" y="60" smashed="yes" rot="R270">
 <attribute name="NAME" x="39.53" y="55.53" size="1.27" layer="25" rot="R90"/>
 <attribute name="VALUE" x="35.46" y="61.27" size="1.27" layer="27" rot="R270"/>
 </element>
 <element name="R11" library="rcl" package="R2512" value="0.1" x="54" y="22" smashed="yes">
-<attribute name="NAME" x="51.205" y="18.34" size="1.27" layer="25"/>
+<attribute name="NAME" x="51.205" y="18.34" size="1.27" layer="25" font="vector"/>
 <attribute name="VALUE" x="51.46" y="18.825" size="1.27" layer="27"/>
 </element>
 <element name="IC1" library="analog-devices" package="SO8" value="AD826R" x="51" y="32" smashed="yes">
-<attribute name="NAME" x="49.695" y="31.575" size="1.27" layer="25"/>
+<attribute name="NAME" x="49.695" y="31.575" size="1.27" layer="25" font="vector"/>
 <attribute name="VALUE" x="55.445" y="30.095" size="1.27" layer="27" rot="R90"/>
 </element>
 <element name="R12" library="rcl" package="R0805" value="100k" x="50" y="40" smashed="yes">
-<attribute name="NAME" x="48.265" y="41.37" size="1.27" layer="25"/>
+<attribute name="NAME" x="48.265" y="41.37" size="1.27" layer="25" font="vector"/>
 <attribute name="VALUE" x="49.365" y="37.46" size="1.27" layer="27"/>
 </element>
 <element name="R13" library="rcl" package="R0805" value="100k" x="55" y="40" smashed="yes">
-<attribute name="NAME" x="53.265" y="41.27" size="1.27" layer="25"/>
+<attribute name="NAME" x="53.265" y="41.27" size="1.27" layer="25" font="vector"/>
 <attribute name="VALUE" x="54.365" y="37.46" size="1.27" layer="27"/>
 </element>
 <element name="R14" library="rcl" package="R0805" value="66k" x="55" y="34" smashed="yes" rot="R90">
-<attribute name="NAME" x="57.93" y="32.165" size="1.27" layer="25" rot="R90"/>
+<attribute name="NAME" x="57.93" y="32.165" size="1.27" layer="25" font="vector" rot="R90"/>
 <attribute name="VALUE" x="57.54" y="33.365" size="1.27" layer="27" rot="R90"/>
 </element>
 <element name="R15" library="rcl" package="R0805" value="66k" x="45" y="32" smashed="yes" rot="R270">
-<attribute name="NAME" x="42.47" y="33.635" size="1.27" layer="25" rot="R270"/>
+<attribute name="NAME" x="42.47" y="33.635" size="1.27" layer="25" font="vector" rot="R270"/>
 <attribute name="VALUE" x="42.46" y="32.635" size="1.27" layer="27" rot="R270"/>
 </element>
 <element name="R16" library="rcl" package="R0805" value="20k" x="55" y="29" smashed="yes" rot="R90">
-<attribute name="NAME" x="57.93" y="27.265" size="1.27" layer="25" rot="R90"/>
+<attribute name="NAME" x="57.93" y="27.265" size="1.27" layer="25" font="vector" rot="R90"/>
 <attribute name="VALUE" x="57.54" y="28.365" size="1.27" layer="27" rot="R90"/>
 </element>
 <element name="R17" library="rcl" package="R0805" value="20k" x="52" y="26" smashed="yes" rot="R180">
-<attribute name="NAME" x="56.935" y="26.33" size="1.27" layer="25" rot="R180"/>
+<attribute name="NAME" x="56.935" y="26.33" size="1.27" layer="25" font="vector" rot="R180"/>
 <attribute name="VALUE" x="52.635" y="28.54" size="1.27" layer="27" rot="R180"/>
 </element>
 <element name="R18" library="rcl" package="R0805" value="1M" x="50" y="51" rot="R270"/>
@@ -3323,7 +3332,10 @@ design rules under a new name.</description>
 <attribute name="VALUE" x="55.54" y="68.73" size="1.27" layer="27" rot="R90"/>
 </element>
 <element name="C5" library="rcl" package="C1210" value="10u, 25V" x="39" y="74" rot="R270"/>
-<element name="D1" library="diode" package="SMB" value="" x="14" y="7"/>
+<element name="D1" library="diode" package="SMB" value="" x="14" y="7" smashed="yes">
+<attribute name="NAME" x="11.841" y="9.159" size="1.27" layer="25" font="vector"/>
+<attribute name="VALUE" x="11.841" y="3.571" size="1.27" layer="27"/>
+</element>
 <element name="C6" library="resistor" package="C0805" value="100n" x="41" y="60" smashed="yes" rot="R270">
 <attribute name="NAME" x="41.984" y="55.511" size="1.27" layer="25" rot="R90"/>
 <attribute name="VALUE" x="38.714" y="60.889" size="1.27" layer="27" rot="R270"/>
