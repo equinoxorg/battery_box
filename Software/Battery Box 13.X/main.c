@@ -57,7 +57,7 @@ __CONFIG(WRT_OFF & PLLEN_ON & STVREN_ON & BORV_LO & LVP_ON);
 #define LVCO_PIN	(1 << 3)    //RC3
 #define LEDR_PIN	(1 << 1)    //RC1
 #define LEDG_PIN	(1 << 2)    //RC2
-#define I_SENSE_PIN     (1 << 1)
+#define I_SENSE_PIN     (1 << 0)
 
 //Analogue input pins
 #define BATT_V	2
@@ -66,7 +66,7 @@ __CONFIG(WRT_OFF & PLLEN_ON & STVREN_ON & BORV_LO & LVP_ON);
 
 #define FULL_BATT_VOLTAGE       14.0f
 #define CHARGED_BATT_VOLTAGE    13.0f
-#define CUTOFF_VOLTAGE          10.9f
+#define CUTOFF_VOLTAGE          10.8f
 #define VCC_VOLTAGE             5.0f
 #define LOW_BATT_PERCENTAGE     0.25f
 #define MIN_CHARGING_CURRENT    ((uint8_t) 100)
@@ -115,6 +115,7 @@ void main(void)
         switch (state)
         {
             case STATE_SLEEP:
+                //PORTC &= ~LVCO_PIN;
                 SLEEP();
                 break;
 
@@ -123,7 +124,7 @@ void main(void)
 
                 //Turn on Green LED
                 PORTC |= (LEDG_PIN | LVCO_PIN);
-
+                __delay_ms(50);            //allow voltage to stabilise
                 //Read the ADC and oversamples to improve accuracy
                 adc_average = 0;
                 for (i = 0; i < ADC_OVERSAMPLES; i++)
@@ -149,7 +150,7 @@ void main(void)
                 else if  (adc_result < LOW_BATT_LEVEL)                          //NOTE: LOW VOLTAGE FLICKER OCCURS IF THIS LOOP IS EXECUTED
                 {
                     //Turn on Grean and Red Led for orange
-                    PORTC |= (LEDG_PIN | LEDR_PIN);
+                    PORTC |= (LEDG_PIN | LEDR_PIN | LVCO_PIN );
                 }
                 break;
 
@@ -266,9 +267,7 @@ void interrupt ISR (void)
             //Testing:
             PORTC |= (LEDR_PIN);
             __delay_ms(100);
-            PORTC &= ~(LEDR_PIN);
-            __delay_ms(100);
-            PORTC |= (LEDR_PIN);
+            PORTC &= ~(LEDR_PIN | LEDG_PIN | LVCO_PIN);
 
             state = STATE_SLEEP;          //Sleep
         }

@@ -1,7 +1,8 @@
-_init_hardware: CODE, 556 0 32
-_ISR: CODE, 4 0 132
-_main: CODE, 139 0 326
-_read_ADC: CODE, 511 0 45
-_eeprom_read: CODE, 588 0 28
-_eeprom_write: CODE, 465 0 46
-Total: 609
+_init_hardware: CODE, 574 0 29
+_ISR: CODE, 4 0 85
+_main: CODE, 92 0 341
+i1_eeprom_read: CODE, 603 0 28
+_read_ADC: CODE, 488 0 51
+_eeprom_read: CODE, 539 0 35
+_eeprom_write: CODE, 433 0 55
+Total: 624
