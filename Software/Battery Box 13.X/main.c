@@ -171,16 +171,16 @@ void main(void)
 
                 //Averages the read ADC samples
                 adc_result = adc_average / ADC_OVERSAMPLES;
-               // if (adc_average > MIN_CHARGING_CURRENT)
-               // {
-                    adc_average = 0;
-                    for (i = 0; i < ADC_OVERSAMPLES; i++)
-                        adc_average += read_ADC(BATT_V);
+                if (adc_average > MIN_CHARGING_CURRENT)
+                {
+                    //adc_average = 0;
+                    //for (i = 0; i < ADC_OVERSAMPLES; i++)
+                        //adc_average += read_ADC(BATT_V);
 
                     //Averages the read ADC samples
-                    adc_result = adc_average / ADC_OVERSAMPLES;
-                    if (adc_result > CHARGED_BATT_VOLTAGE_LEVEL)
-                    {
+                    //adc_result = adc_average / ADC_OVERSAMPLES;
+                    //if (adc_result > CHARGED_BATT_VOLTAGE_LEVEL)
+                    //{
                         //writes a 1 into EEPROM
                         eeprom_write(0xF001, 0);
                         state = STATE_ON;
@@ -190,8 +190,8 @@ void main(void)
 
                         //Turn on 
                         PORTC |= (LEDG_PIN|LVCO_PIN);
-                    }
-               // }
+                    //}
+                }
                 break;
         }
         //Waits a set time before reading the ADC again
