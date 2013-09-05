@@ -20,7 +20,7 @@
  |  Compiler: hi-tech-picc v9.83 - lite version
  |
  |                   __________
- |	VCC         |1      14| GND
+ |      VCC         |1      14| GND
  |(RA5) POW_SW      |2      13| PGD     (Programming Pin)
  |                  |3      12| PGC     (Programming Pin)
  |      ~MCLR       |4      11| BATT_V (Stepdown to 0-5V)   (RA2/AN2)
@@ -60,26 +60,32 @@ __CONFIG(WRT_OFF & PLLEN_ON & STVREN_ON & BORV_LO & LVP_ON);
 #define I_SENSE_PIN     (1 << 0)
 
 //Analogue input pins
-#define BATT_V	2
-#define CURR_V 4
+#define BATT_V          2
+#define CURR_V          4
 #define I_SENSE_INPUT   4       //or should this be 0?
 
 #define FULL_BATT_VOLTAGE       14.0f
-#define CHARGED_BATT_VOLTAGE    13.0f
+#define CHARGED_BATT_VOLTAGE    12.0f
 #define CUTOFF_VOLTAGE          10.8f
 #define VCC_VOLTAGE             5.0f
 #define LOW_BATT_PERCENTAGE     0.25f
-#define MIN_CHARGING_CURRENT    ((uint8_t) 100)
+#define MIN_CHARGING_CURRENT    0.1f
+#define OVER_CURRENT            2.0f
+
 
 //Converts the above levels to ADC values - [DONT EDIT]
-#define LOW_BATT_VOLTAGE        ( (FULL_BATT_VOLTAGE-CUTOFF_VOLTAGE)*LOW_BATT_PERCENTAGE + CUTOFF_VOLTAGE )
-#define LOW_BATT_LEVEL          ( (uint16_t) ( (LOW_BATT_VOLTAGE/3.0f) / (( VCC_VOLTAGE /(float)0x3FF) ) ))
-#define CUTOUT_LEVEL            ( (uint16_t) ( (CUTOFF_VOLTAGE/3.0f)/( VCC_VOLTAGE / (float)0x3FF) ) )
-#define CHARGED_BATT_VOLTAGE_LEVEL    ( (uint16_t) ( (CHARGED_BATT_VOLTAGE/3.0f)/( VCC_VOLTAGE / (float)0x3FF) ) )
+#define LOW_BATT_VOLTAGE            ( (FULL_BATT_VOLTAGE-CUTOFF_VOLTAGE)*LOW_BATT_PERCENTAGE + CUTOFF_VOLTAGE )
+#define LOW_BATT_LEVEL              ( (uint16_t) ( (LOW_BATT_VOLTAGE/3.0f) / (( VCC_VOLTAGE /(float)0x3FF) ) ))
+#define CUTOUT_LEVEL                ( (uint16_t) ( (CUTOFF_VOLTAGE/3.0f)/( VCC_VOLTAGE / (float)0x3FF) ) )
+#define CHARGED_BATT_VOLTAGE_LEVEL  ( (uint16_t) ( (CHARGED_BATT_VOLTAGE/3.0f)/( VCC_VOLTAGE / (float)0x3FF) ) )
+#define CHARGING_CURRENT_LEVEL      ( (uint16_t) ( ((VCC_VOLTAGE/2) - MIN_CHARGING_CURRENT)/( VCC_VOLTAGE / (float)0x3FF) ) )
+#define OVER_CURRENT_LEVEL          ( (uint16_t) ( ((VCC_VOLTAGE/2) + OVER_CURRENT)/( VCC_VOLTAGE / (float)0x3FF) ) )
+#define OVER_CHARGING_CURRENT_LEVEL ( (uint16_t) ( ((VCC_VOLTAGE/2) - OVER_CURRENT)/( VCC_VOLTAGE / (float)0x3FF) ) )
+
 
 //State Machine States
-#define STATE_ON 0
-#define STATE_OFF 1
+#define STATE_ON    0
+#define STATE_OFF   1
 #define STATE_SLEEP 2
 
 #define ADC_OVERSAMPLES 8
@@ -92,6 +98,7 @@ char state;
 //Function definitions
 void init_hardware();
 uint16_t read_ADC(char);
+uint16_t read_ADC_average(unsigned char adc_channel);
 
 void main(void)
 {
@@ -103,7 +110,7 @@ void main(void)
     init_hardware();
 
     __delay_ms(500);
-    
+
     if (eeprom_read(0xF001))
         state = STATE_OFF;
     else
@@ -115,82 +122,63 @@ void main(void)
         switch (state)
         {
             case STATE_SLEEP:
-                //PORTC &= ~LVCO_PIN;
+                PORTC &= ~(LEDR_PIN | LEDG_PIN | LVCO_PIN);                     //turns off all O/P
                 SLEEP();
                 break;
 
-            case STATE_ON:
-                //Ensure the outputs are on
+            case STATE_OFF:
 
-                //Turn on Green LED
+                adc_result = 0;
+                adc_result = read_ADC_average(BATT_V);
+                if (adc_result > CHARGED_BATT_VOLTAGE_LEVEL)
+                {
+                    eeprom_write(0xF001, 0);
+                    state = STATE_ON;
+                }
+                else
+                    state = STATE_SLEEP;
+                break;
+
+
+            case STATE_ON:
+                //Turn on Green LED and O/P
                 PORTC |= (LEDG_PIN | LVCO_PIN);
-                __delay_ms(50);            //allow voltage to stabilise
+                __delay_ms(50);                                                 //allow voltage to stabilise
                 //Read the ADC and oversamples to improve accuracy
                 adc_average = 0;
-                for (i = 0; i < ADC_OVERSAMPLES; i++)
-                    adc_average += read_ADC(BATT_V);
-
-                //Averages the read ADC samples
-                adc_result = adc_average / ADC_OVERSAMPLES;
+                adc_result = read_ADC_average(BATT_V);
                 if (adc_result < CUTOUT_LEVEL)
                 {
                     //writes a 1 into EEPROM
                     eeprom_write(0xF001, 1);
-
-                    //Turn the state to OFF
-                    state = STATE_OFF;
-
                     //Turn off Green LED here and Turn on Red LED
                     PORTC &= ~LEDG_PIN;
                     PORTC |= LEDR_PIN;
-
                     //Turn off output
                     PORTC &= ~LVCO_PIN;
+                    //Turn the state to OFF
+                    state = STATE_OFF;
                 }
                 else if  (adc_result < LOW_BATT_LEVEL)                          //NOTE: LOW VOLTAGE FLICKER OCCURS IF THIS LOOP IS EXECUTED
                 {
                     //Turn on Grean and Red Led for orange
                     PORTC |= (LEDG_PIN | LEDR_PIN | LVCO_PIN );
                 }
-                break;
-
-            case STATE_OFF:
-                //Turn off outputs
-                PORTC &= ~LVCO_PIN;
-
-                //Turn on Red LED
-                PORTC |= LEDR_PIN;
-                //Turn off Green LED
-                PORTC &= ~LEDG_PIN;
-
-                //read ISENSE code here
-                //Read the ADC and oversamples to improve accuracy
-                adc_average = 0;
-                for (i = 0; i < ADC_OVERSAMPLES; i++)
-                    adc_average += read_ADC(I_SENSE_INPUT);
-
-                //Averages the read ADC samples
-                adc_result = adc_average / ADC_OVERSAMPLES;
-                if (adc_average > MIN_CHARGING_CURRENT)
+                else
                 {
-                    //adc_average = 0;
-                    //for (i = 0; i < ADC_OVERSAMPLES; i++)
-                        //adc_average += read_ADC(BATT_V);
-
                     //Averages the read ADC samples
-                    //adc_result = adc_average / ADC_OVERSAMPLES;
-                    //if (adc_result > CHARGED_BATT_VOLTAGE_LEVEL)
-                    //{
-                        //writes a 1 into EEPROM
-                        eeprom_write(0xF001, 0);
-                        state = STATE_ON;
+                    adc_result = read_ADC_average(I_SENSE_INPUT);
+                    if (adc_result > OVER_CURRENT_LEVEL || adc_result < OVER_CHARGING_CURRENT_LEVEL)
+                    {
+                        PORTC |= LEDR_PIN;
+                        state = STATE_SLEEP;
+                    }
+                    else if (adc_result < CHARGING_CURRENT_LEVEL)
+                    {
+                        PORTC &= ~LEDG_PIN;
+                        __delay_ms(100);
+                    }
 
-                        //Turn off Red LED
-                        PORTC &= ~LEDR_PIN;
-
-                        //Turn on 
-                        PORTC |= (LEDG_PIN|LVCO_PIN);
-                    //}
                 }
                 break;
         }
@@ -220,15 +208,10 @@ void init_hardware(void)
     ANSELC |= 1 << 1;
 
     //Set up the chip for interrupts
-    IOCAP |= 1 << 5;        //enable interrupt-on-change for RA5
+    IOCAP |= 1 << 5;                                                            //enable interrupt-on-change for RA5
     IOCAN = 0x0;
-    INTCON = 0b10001000;    //enable global interrupt (check if this bit is needed), and enable interrupt-on-change
-    ei();                   //enable global interrupts (test to see if this is needed
-//
-//    IOCAP5 = 1;          //Enabled RA5 Interrupt-On-Change
-//    IOCAN5 = 0;
-//    IOCIE = 1;
-//    GIE = 1;            //Enables Global Interrupts
+    INTCON = 0b10001000;                                                        //enable global interrupt (check if this bit is needed), and enable interrupt-on-change
+    ei();                                                                       //enable global interrupts (test to see if this is needed
 }
 
 uint16_t read_ADC(unsigned char adc_channel)
@@ -257,6 +240,17 @@ uint16_t read_ADC(unsigned char adc_channel)
 
 }
 
+uint16_t read_ADC_average(unsigned char adc_channel)
+{
+    uint16_t adc_average = 0;
+    int i;
+    for (i = 0; i < ADC_OVERSAMPLES; i++)
+        adc_average += read_ADC(adc_channel);
+
+   //Averages the read ADC samples
+   return (adc_average / ADC_OVERSAMPLES);
+}
+
 void interrupt ISR (void)
 {
 
@@ -264,27 +258,24 @@ void interrupt ISR (void)
     {
         if (state != STATE_SLEEP)
         {
-            //Testing:
-            PORTC |= (LEDR_PIN);
-            __delay_ms(100);
             PORTC &= ~(LEDR_PIN | LEDG_PIN | LVCO_PIN);
-
-            state = STATE_SLEEP;          //Sleep
+            PORTC |= LEDR_PIN;
+            state = STATE_SLEEP;                                                //Sleep
         }
         else
         {
-            PORTC |= (LEDG_PIN);
-            __delay_ms(100);
-            PORTC &= ~(LEDG_PIN);
-            __delay_ms(100);
-
-
-            if (eeprom_read(0xF001))
+            PORTC &= ~(LEDR_PIN | LEDG_PIN | LVCO_PIN);
+            if (eeprom_read(0xF001))                                            //Checks if STATE_OFF/LVDC has been triggered
+            {
+                PORTC |= (LEDR_PIN|LEDG_PIN);
                 state = STATE_OFF;
+            }
             else
+            {
+                PORTC |= LEDG_PIN;
                 state = STATE_ON;
+            }
         }
     }
-
     IOCAF = 0x0;
 }
