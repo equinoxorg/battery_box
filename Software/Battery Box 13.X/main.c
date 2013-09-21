@@ -65,12 +65,12 @@ __CONFIG(WRT_OFF & PLLEN_ON & STVREN_ON & BORV_LO & LVP_ON);
 #define I_SENSE_INPUT   4       //or should this be 0?
 
 #define FULL_BATT_VOLTAGE       14.0f
-#define CHARGED_BATT_VOLTAGE    12.5f
+#define CHARGED_BATT_VOLTAGE    12.3f
 #define CUTOFF_VOLTAGE          10.8f
 #define VCC_VOLTAGE             5.0f
 #define LOW_BATT_PERCENTAGE     0.25f
 #define MIN_CHARGING_CURRENT    0.25f
-#define OVER_CURRENT            0.25f
+#define OVER_CURRENT            0.8f
 
 
 //Converts the above levels to ADC values - [DONT EDIT]
