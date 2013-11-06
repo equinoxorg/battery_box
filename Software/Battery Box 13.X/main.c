@@ -103,7 +103,7 @@ void main(void)
     init_hardware();
 
     __delay_ms(500);
-    
+
     if (eeprom_read(0xF001))
         state = STATE_OFF;
     else
@@ -188,7 +188,7 @@ void main(void)
                         //Turn off Red LED
                         PORTC &= ~LEDR_PIN;
 
-                        //Turn on 
+                        //Turn on
                         PORTC |= (LEDG_PIN|LVCO_PIN);
                     }
                // }
